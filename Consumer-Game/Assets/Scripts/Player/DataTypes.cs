@@ -11,4 +11,12 @@ public struct PlayerProperties
 public struct InputProperties
 {
     public enum Slots {FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH, SEVENTH, EIGHTH}
+    public static readonly string FIRST = "First";
+    public static readonly string SECOND = "Second";
+    public static readonly string THIRD = "Third";
+    public static readonly string FOURTH = "Fourth";
+    public static readonly string FIFTH = "Fifth";
+    public static readonly string SIXTH = "Sixth";
+    public static readonly string SEVENTH = "Seventh";
+    public static readonly string EIGHTH = "Eighth";
 }
