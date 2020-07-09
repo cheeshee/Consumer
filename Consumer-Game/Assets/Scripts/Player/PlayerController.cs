@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     
     //variables for movement
     protected float maxSpeed;
+    [SerializeField]
     protected float acceleration;
     // protected float deceleration;
 
