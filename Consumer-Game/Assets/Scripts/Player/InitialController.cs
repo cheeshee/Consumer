@@ -14,7 +14,7 @@ public class InitialController : PlayerController
         charType = (int) PlayerProperties.CharacterType.CHILD;
         
         maxSpeed = 3f;
-        acceleration = 10f;
+        acceleration = 5f;
         // deceleration
 
         jumpMultiplier = 100f;
