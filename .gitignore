@@ -9,6 +9,7 @@ Consumer-Game/[Bb]uild/
 Consumer-Game/[Bb]uilds/
 Consumer-Game/[Ll]ogs/
 Consumer-Game/[Mm]emoryCaptures/
+Kenney Game Assets (version 41)/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !Consumer-Game/[Aa]ssets/**/*.meta
