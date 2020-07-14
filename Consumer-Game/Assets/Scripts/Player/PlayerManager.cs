@@ -29,6 +29,12 @@ public class PlayerManager : MonoBehaviour
         DetectShapeShift();
     }
 
+    private void FixedUpdate() {
+        characterSlots[currCharacter].FixedUpdate();
+    }
+
+
+
     private void DetectJump()
     {
         if(Input.GetButtonDown("Jump"))
@@ -39,9 +45,9 @@ public class PlayerManager : MonoBehaviour
 
     private void DetectMove()
     {
-        if(Input.GetButton("Move")){
-            characterSlots[currCharacter].Move();
-        }
+
+        characterSlots[currCharacter].Move();
+
     }
 
     private void DetectShapeShift()

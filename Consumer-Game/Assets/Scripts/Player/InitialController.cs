@@ -39,6 +39,7 @@ public class InitialController : PlayerController
     public override void OnSwitch(GameObject player)
     {
         base.OnSwitch(player);
+         player.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     // public override void Move()
@@ -56,15 +57,16 @@ public class InitialController : PlayerController
     //     base.Attack();
 
     // }
-    
- // Start is called before the first frame update
-    void Start()
-    {
-    }
+
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        
+        base.Update();
+    }
+
+
+    public override void FixedUpdate(){
+        base.FixedUpdate();
     }
 }

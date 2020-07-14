@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController
 {
     protected Rigidbody2D charRb;
     protected float health = 100;
@@ -12,9 +12,9 @@ public class PlayerController : MonoBehaviour
     protected int charType;
     
     //variables for movement
-    protected float maxSpeed;
-    [SerializeField]
-    protected float acceleration;
+   [SerializeField] protected float maxSpeed = 10f;
+    
+
     // protected float deceleration;
 
     //how close to mouse posiiton to stop moving
@@ -41,6 +41,15 @@ public class PlayerController : MonoBehaviour
     protected Sprite charSprite;
     protected Animator charAnimator;
 
+    //Player Physics Variables
+    protected float playerVelocityX = 0f;
+    protected float playerVelocityY = 0f;
+    protected bool movingRight = false;
+    protected bool movingLeft = false;
+    protected Vector2 normalVector = new Vector2(0f, 1f);
+    protected Vector2 perpendicularVector = new Vector2(1f, 0f);
+    [SerializeField] protected float deacceleration = 10f;
+    [SerializeField] protected float acceleration = 5f;
 
 
 
@@ -50,7 +59,7 @@ public class PlayerController : MonoBehaviour
         //change everything about the scene componenets
         //rigidbody
         charRb = player.GetComponent<Rigidbody2D>();
-        charRb.bodyType = RigidbodyType2D.Dynamic;
+        //charRb.bodyType = RigidbodyType2D.Dynamic;
         //sprite
         //animator
         //hitbox
@@ -59,17 +68,33 @@ public class PlayerController : MonoBehaviour
 
     public virtual void Move()
     {
-        Debug.Log("moving");
-        if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > charRb.position.x + xRange)
-        {
-            if(charRb.velocity.x < maxSpeed)
-                charRb.AddForce(new Vector2(acceleration, 0f));
+        
+
+        if (Input.GetButton("Move")){
+            Debug.Log("moving");
+            //Right Direction
+            if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > charRb.position.x + xRange)
+            {
+                movingRight = true;
+                movingLeft = false;
+                    
+            }
+            //Left Direction
+            else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x< charRb.position.x - xRange)
+            {
+                movingRight = false;
+                movingLeft = true;
+            }
+            else {
+                movingLeft = false;
+                movingRight = false;
+            }
         }
-        else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x< charRb.position.x - xRange)
-        {
-            if(charRb.velocity.x > -maxSpeed)
-                charRb.AddForce(new Vector2(-acceleration, 0f));
+        else{
+            movingLeft = false;
+            movingRight = false;
         }
+
     }
 
     public virtual void Jump()
@@ -83,15 +108,37 @@ public class PlayerController : MonoBehaviour
         Debug.Log("attacking");
     }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         
+    }
+
+    public virtual void FixedUpdate() {
+
+        if (movingRight && Vector2.Dot(charRb.velocity,perpendicularVector) < 0){
+            playerVelocityX = 0;
+        }
+        else if (movingRight && Vector2.Dot(charRb.velocity,perpendicularVector) >= 0){
+            playerVelocityX = Mathf.Clamp(playerVelocityX + acceleration, 0f, maxSpeed);
+        }
+        else if (movingLeft && Vector2.Dot(charRb.velocity,perpendicularVector) > 0){
+            playerVelocityX = 0;
+        }
+        else if (movingLeft && Vector2.Dot(charRb.velocity,perpendicularVector) <= 0){
+            playerVelocityX = Mathf.Clamp(playerVelocityX - acceleration, -maxSpeed, 0f);
+        }
+        else if (!movingLeft && !movingRight){
+            if (playerVelocityX < 0){
+                playerVelocityX = Mathf.Clamp(playerVelocityX + deacceleration,-maxSpeed, 0f);
+            }
+            else if (playerVelocityX > 0){
+                playerVelocityX = Mathf.Clamp(playerVelocityX - deacceleration, 0f, maxSpeed);
+            }
+        }
+
+
+        //Debug.Log(charRb);
+        charRb.velocity = new Vector2 (playerVelocityX, playerVelocityY);
     }
 }
