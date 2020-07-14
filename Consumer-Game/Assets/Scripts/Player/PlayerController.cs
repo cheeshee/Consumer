@@ -48,7 +48,7 @@ public class PlayerController
     protected bool movingLeft = false;
     protected Vector2 normalVector = new Vector2(0f, 1f);
     protected Vector2 perpendicularVector = new Vector2(1f, 0f);
-    [SerializeField] protected float deacceleration = 5f;
+    [SerializeField] protected float deacceleration = 10f;
     [SerializeField] protected float acceleration = 5f;
 
 
@@ -84,6 +84,10 @@ public class PlayerController
             {
                 movingRight = false;
                 movingLeft = true;
+            }
+            else {
+                movingLeft = false;
+                movingRight = false;
             }
         }
         else{
