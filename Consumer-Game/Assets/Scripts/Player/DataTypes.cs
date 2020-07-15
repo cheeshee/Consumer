@@ -20,3 +20,6 @@ public struct InputProperties
     public static readonly string SEVENTH = "Seventh";
     public static readonly string EIGHTH = "Eighth";
 }
+
+// UPDATE EVERYTIME THE LAYERS ARE CHANGED
+public enum Layers {Default, TransparentFX, Ignore_Raycast, NULL3, Water, UI, NULL6, NULL7, Ground, Player}
