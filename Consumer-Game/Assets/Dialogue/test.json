@@ -1,0 +1,18 @@
+{
+    "currentStage":0,
+    "currentConvoID":0,
+    "stages":[
+        [ // stage 0
+            [ // convo 0.0
+                ["anon","i literally wanna die"], // convo index 0
+                ["anon2","very cool"]
+            ]
+        ],
+        [ // stage 1
+            [ // convo 1.0
+                ["anon","i literally wanna die"], // convo index 0
+                ["anon2","very cool"]
+            ]
+        ]
+    ]
+}
