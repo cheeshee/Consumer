@@ -189,7 +189,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7073886388816460221}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3a98cefa1eb1a44aa2f276583dc4ef, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bb182c35a34d4442979e5499dbdf62d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7073886389014757816
@@ -2100,11 +2100,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7073886388816460217}
     m_Modifications:
-    - target: {fileID: 8306403658221546257, guid: f3706ad4ee92f6c469da4a28d4a802c0,
-        type: 3}
-      propertyPath: m_Name
-      value: Speaker Dialogue Box
-      objectReference: {fileID: 0}
     - target: {fileID: 8306403658221546262, guid: f3706ad4ee92f6c469da4a28d4a802c0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2210,6 +2205,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8306403658221546257, guid: f3706ad4ee92f6c469da4a28d4a802c0,
+        type: 3}
+      propertyPath: m_Name
+      value: Speaker Dialogue Box
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3706ad4ee92f6c469da4a28d4a802c0, type: 3}
 --- !u!1001 &4677078624167605055
@@ -2219,11 +2219,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7073886388816460217}
     m_Modifications:
-    - target: {fileID: 2504894244244245856, guid: 67cb4246821f2fb4a90fea6246b7be35,
-        type: 3}
-      propertyPath: m_Name
-      value: Dialogue Box
-      objectReference: {fileID: 0}
     - target: {fileID: 2504894244244245863, guid: 67cb4246821f2fb4a90fea6246b7be35,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2328,6 +2323,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504894244244245856, guid: 67cb4246821f2fb4a90fea6246b7be35,
+        type: 3}
+      propertyPath: m_Name
+      value: Dialogue Box
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67cb4246821f2fb4a90fea6246b7be35, type: 3}
