@@ -9,8 +9,9 @@ public class DialogueController : MonoBehaviour
     private Collider2D playerDetectionCollider;
     private GameObject indicator;
     private GameObject dialogueCanvas;
-    bool inTalkingRange;
-    bool inDialogue;
+    private bool inTalkingRange;
+    private bool inDialogue;
+    private Rigidbody2D playerRb;
 
     [SerializeField]
     private TextAsset textFile;
@@ -51,6 +52,7 @@ public class DialogueController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other){
         if (other.gameObject.layer == (int) Layers.Player){
             Debug.Log("in talking range");
+            playerRb = other.gameObject.GetComponent<Rigidbody2D>();
             inTalkingRange = true;
             indicator.SetActive(true);
         }
@@ -71,11 +73,17 @@ public class DialogueController : MonoBehaviour
             inDialogue = true;            
             dialogueCanvas.SetActive(true);
             // Pause player controls TODO
-            
+            playerRb.bodyType = RigidbodyType2D.Static;
             // Pass lines to be displayed
             dialogueCanvas.GetComponent<DialogueDisplayController>().FeedLines(textJSON["stages"][stage][(int)(currentConvoID - stage) * 10].AsArray);
         }
-        indicator.SetActive(!dialogueCanvas.activeSelf);
+        if (dialogueCanvas.activeSelf){            
+            playerRb.bodyType = RigidbodyType2D.Static;
+            indicator.SetActive(false);
+        } else {
+            playerRb.bodyType = RigidbodyType2D.Dynamic;
+            indicator.SetActive(true);
+        }
     }
 
     private void createSampleJSON(){
