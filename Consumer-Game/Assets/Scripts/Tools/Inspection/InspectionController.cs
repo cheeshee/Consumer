@@ -4,13 +4,13 @@ using UnityEngine;
 using System.IO;
 using SimpleJSON;
 
-public class DialogueController : MonoBehaviour
+public class InspectionController : MonoBehaviour
 {
     private Collider2D playerDetectionCollider;
     private GameObject indicator;
-    private GameObject dialogueCanvas;
-    private bool inTalkingRange;
-    private bool inDialogue;
+    private GameObject inspectionCanvas;
+    private bool inInspectionRange;
+    private bool inInspection;
     private Rigidbody2D playerRb;
 
     [SerializeField]
@@ -19,65 +19,68 @@ public class DialogueController : MonoBehaviour
 
     // dialgoue progress variables
     private int stage;              // mark stages or event triggers
-    private float currentConvoID;   // mark conversation to be held at current stage, s.x where s is the stage number, 
+    private float currentDescriptionID;   // mark conversation to be held at current stage, s.x where s is the stage number, 
     //currently max 10 conversations each stage change above as needed
-   
+
     // Start is called before the first frame update
     void Start()
     {
         playerDetectionCollider = GetComponent<Collider2D>();
         indicator = transform.GetChild(0).gameObject;
         indicator.SetActive(false);
-        dialogueCanvas = GameObject.FindGameObjectWithTag("DialogueCanvas");
-        dialogueCanvas.SetActive(false);
-        inTalkingRange = false;
-        inDialogue = false;   
+        inspectionCanvas = GameObject.FindGameObjectWithTag("InspectionCanvas");
+        inspectionCanvas.SetActive(false);
+        inInspectionRange = false;
+        inInspection = false;   
 
+        // TODO
+        // grab these values whereever they're saved
         stage = 0;
-        currentConvoID = 0;
+        currentDescriptionID = 0;
 
         // load the dialogue text
         loadDialogueJSON();
-   
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(inTalkingRange){
+        if(inInspectionRange){
             EnterDialogue();
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other){
         if (other.gameObject.layer == (int) Layers.Player){
-            Debug.Log("in talking range");
+            Debug.Log("in inspection range");
             playerRb = other.gameObject.GetComponent<Rigidbody2D>();
-            inTalkingRange = true;
+            inInspectionRange = true;
             indicator.SetActive(true);
         }
     }
 
     private void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.layer == (int) Layers.Player){
-            Debug.Log("exiting talking range");
-            inTalkingRange = false;
+            Debug.Log("exiting inspection range");
+            inInspectionRange = false;
             indicator.SetActive(false);
         }
     }
 
     private void EnterDialogue(){
-        if (Input.GetButtonDown("Interact") && !dialogueCanvas.activeSelf){
-            Debug.Log("Entering Dialogue");
+        if (Input.GetButtonDown("Interact") && !inspectionCanvas.activeSelf){
+            Debug.Log("Entering Inspection");
             // Setting UI components
-            inDialogue = true;            
-            dialogueCanvas.SetActive(true);
+            inInspection = true;            
+            inspectionCanvas.SetActive(true);
             // Pause player controls TODO
             playerRb.bodyType = RigidbodyType2D.Static;
             // Pass lines to be displayed
-            dialogueCanvas.GetComponent<DialogueDisplayController>().FeedLines(textJSON["stages"][stage][(int)(currentConvoID - stage) * 10].AsArray);
+            inspectionCanvas.GetComponent<InspectionDisplayController>().FeedLines(textJSON["stages"][stage][(int)(currentDescriptionID - stage) * 10].AsArray);
+            // update stage and currentConvoID TODO
+            
         }
-        if (dialogueCanvas.activeSelf){            
+        if (inspectionCanvas.activeSelf){            
             playerRb.bodyType = RigidbodyType2D.Static;
             indicator.SetActive(false);
         } else {
@@ -89,34 +92,38 @@ public class DialogueController : MonoBehaviour
     private void createSampleJSON(){
          //test // Testing
         JSONObject yeet = new JSONObject();
-        // yeet.Add("currentStage", 0);
-        // yeet.Add("currentConvoID", 0.0);
+        yeet.Add("type", "static");
 
-        JSONArray conversations = new JSONArray();
+        JSONArray description = new JSONArray();
         JSONArray testlines = new JSONArray();
         JSONArray Singlelines = new JSONArray();
-        Singlelines.Add("speaker", "anon");
-        Singlelines.Add("line", "i literally wanna die");
+        Singlelines.Add("object", "thing");
+        Singlelines.Add("sentence", "this is a thing");
         testlines.Add(Singlelines);
         Singlelines = new JSONArray();
-        Singlelines.Add("speaker", "anon2");
-        Singlelines.Add("line", "very cool");
+        Singlelines.Add("object", "thing");
+        Singlelines.Add("sentence", "maybe it does something");
         testlines.Add(Singlelines);
-        conversations.Add(testlines);
+        description.Add(testlines);
         JSONArray stages = new JSONArray();
-        stages.Add(conversations);
-        stages.Add(conversations);
+        stages.Add(description);
+        stages.Add(description);
         
         yeet.Add("stages", stages);
         Debug.Log(yeet.ToString());
-        string path = Application.dataPath + "/TextFiles/DialogueTest.json";
+        string path = Application.dataPath + "/TextFiles/InspectionTest.json";
         File.WriteAllText(path, yeet.ToString());
     }
     private void loadDialogueJSON(){
         textJSON = (JSONObject) JSON.Parse(textFile.ToString());
         // will have to change and check these as we go, possibly skip to next stage
         // TODO
-        // stage = textJSON["currentStage"];
-        // currentConvoID = textJSON["currentConvoID"];    
+        // these values are no longer saved here, need to make new progress files to hold
+        if (textJSON["type"] == "static"){
+            stage = 0;
+            currentDescriptionID = 0;
+        } else {
+            // check stage and current description
+        } 
     }
 }
