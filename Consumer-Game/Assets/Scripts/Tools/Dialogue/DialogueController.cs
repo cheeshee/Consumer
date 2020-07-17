@@ -81,6 +81,7 @@ public class DialogueController : MonoBehaviour
             playerRb.bodyType = RigidbodyType2D.Static;
             // Pass lines to be displayed
             dialogueCanvas.GetComponent<DialogueDisplayController>().FeedLines(textJSON["stages"][stage][(int)(currentConvoID - stage) * 10].AsArray);
+            // update stage and currentConvoID TODO
         }
         if (dialogueCanvas.activeSelf){            
             playerRb.bodyType = RigidbodyType2D.Static;
