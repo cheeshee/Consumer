@@ -20,7 +20,7 @@ public class InspectionController : DialogueController
         indicator = transform.GetChild(0).gameObject;
         indicator.SetActive(false);
         inspectionCanvas = GameObject.FindGameObjectWithTag("InspectionCanvas");
-        inspectionCanvas.SetActive(false);
+        // inspectionCanvas.SetActive(false);
         inRange = false;
         inInteraction = false;   
         closestToPlayer = false;  

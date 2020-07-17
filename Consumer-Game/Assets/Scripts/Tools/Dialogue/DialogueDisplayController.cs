@@ -29,7 +29,11 @@ public class DialogueDisplayController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DetectNextLine();
+        if (conversation == null){
+            gameObject.SetActive(false);
+        } else {
+            DetectNextLine();
+        }
     }
 
     public int FeedLines(JSONArray lines){

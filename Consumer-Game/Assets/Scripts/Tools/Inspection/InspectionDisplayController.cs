@@ -28,7 +28,11 @@ public class InspectionDisplayController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DetectNextLine();
+        if (description == null){
+            gameObject.SetActive(false);
+        } else {
+            DetectNextLine();
+        }
     }
 
     public int FeedLines(JSONArray lines){

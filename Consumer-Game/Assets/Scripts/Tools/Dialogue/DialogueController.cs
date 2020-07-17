@@ -30,10 +30,10 @@ public class DialogueController : MonoBehaviour
     {
         playerDetectionCollider = GetComponent<Collider2D>();
         indicator = transform.GetChild(0).gameObject;
-        // indicatorAnimator = indicator.GetComponent<Animator>();
+        indicatorAnimator = indicator.GetComponent<Animator>();
         indicator.SetActive(false);
         dialogueCanvas = GameObject.FindGameObjectWithTag("DialogueCanvas");
-        dialogueCanvas.SetActive(false);
+        // dialogueCanvas.SetActive(false);
         inRange = false;
         inInteraction = false; 
         closestToPlayer = false;  
@@ -129,7 +129,7 @@ public class DialogueController : MonoBehaviour
 
     public void setClosest(bool closest){
         closestToPlayer = closest;
-        // indicatorAnimator.SetBool("inRange", closest);
+        indicatorAnimator.SetBool("inRange", closest);
     }
 
 }
