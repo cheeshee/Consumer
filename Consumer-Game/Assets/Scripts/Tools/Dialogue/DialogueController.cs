@@ -6,19 +6,22 @@ using SimpleJSON;
 
 public class DialogueController : MonoBehaviour
 {
-    private Collider2D playerDetectionCollider;
-    private GameObject indicator;
+    protected Collider2D playerDetectionCollider;
+    protected GameObject indicator;
+    protected Animator indicatorAnimator;
+    protected bool inRange;
+    protected bool inInteraction;
+    protected Rigidbody2D playerRb;
     private GameObject dialogueCanvas;
-    private bool inTalkingRange;
-    private bool inDialogue;
-    private Rigidbody2D playerRb;
+
+    protected bool closestToPlayer;
 
     [SerializeField]
-    private TextAsset textFile;
-    private JSONObject textJSON;
+    protected TextAsset textFile;
+    protected JSONObject textJSON;
 
     // dialgoue progress variables
-    private int stage;              // mark stages or event triggers
+    protected int stage;              // mark stages or event triggers
     private float currentConvoID;   // mark conversation to be held at current stage, s.x where s is the stage number, 
     //currently max 10 conversations each stage change above as needed
    
@@ -27,11 +30,13 @@ public class DialogueController : MonoBehaviour
     {
         playerDetectionCollider = GetComponent<Collider2D>();
         indicator = transform.GetChild(0).gameObject;
+        // indicatorAnimator = indicator.GetComponent<Animator>();
         indicator.SetActive(false);
         dialogueCanvas = GameObject.FindGameObjectWithTag("DialogueCanvas");
         dialogueCanvas.SetActive(false);
-        inTalkingRange = false;
-        inDialogue = false;   
+        inRange = false;
+        inInteraction = false; 
+        closestToPlayer = false;  
 
         stage = 0;
         currentConvoID = 0;
@@ -44,7 +49,7 @@ public class DialogueController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(inTalkingRange){
+        if(inRange && closestToPlayer){
             EnterDialogue();
         }
     }
@@ -53,7 +58,7 @@ public class DialogueController : MonoBehaviour
         if (other.gameObject.layer == (int) Layers.Player){
             Debug.Log("in talking range");
             playerRb = other.gameObject.GetComponent<Rigidbody2D>();
-            inTalkingRange = true;
+            inRange = true;
             indicator.SetActive(true);
         }
     }
@@ -61,7 +66,7 @@ public class DialogueController : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.layer == (int) Layers.Player){
             Debug.Log("exiting talking range");
-            inTalkingRange = false;
+            inRange = false;
             indicator.SetActive(false);
         }
     }
@@ -70,7 +75,7 @@ public class DialogueController : MonoBehaviour
         if (Input.GetButtonDown("Interact") && !dialogueCanvas.activeSelf){
             Debug.Log("Entering Dialogue");
             // Setting UI components
-            inDialogue = true;            
+            inInteraction = true;            
             dialogueCanvas.SetActive(true);
             // Pause player controls TODO
             playerRb.bodyType = RigidbodyType2D.Static;
@@ -112,6 +117,7 @@ public class DialogueController : MonoBehaviour
         string path = Application.dataPath + "/TextFiles/DialogueTest.json";
         File.WriteAllText(path, yeet.ToString());
     }
+
     private void loadDialogueJSON(){
         textJSON = (JSONObject) JSON.Parse(textFile.ToString());
         // will have to change and check these as we go, possibly skip to next stage
@@ -119,4 +125,10 @@ public class DialogueController : MonoBehaviour
         // stage = textJSON["currentStage"];
         // currentConvoID = textJSON["currentConvoID"];    
     }
+
+    public void setClosest(bool closest){
+        closestToPlayer = closest;
+        // indicatorAnimator.SetBool("inRange", closest);
+    }
+
 }

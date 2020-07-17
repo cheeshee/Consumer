@@ -4,21 +4,12 @@ using UnityEngine;
 using System.IO;
 using SimpleJSON;
 
-public class InspectionController : MonoBehaviour
+public class InspectionController : DialogueController
 {
-    private Collider2D playerDetectionCollider;
-    private GameObject indicator;
     private GameObject inspectionCanvas;
-    private bool inInspectionRange;
-    private bool inInspection;
-    private Rigidbody2D playerRb;
 
-    [SerializeField]
-    private TextAsset textFile;
-    private JSONObject textJSON;
 
     // dialgoue progress variables
-    private int stage;              // mark stages or event triggers
     private float currentDescriptionID;   // mark conversation to be held at current stage, s.x where s is the stage number, 
     //currently max 10 conversations each stage change above as needed
 
@@ -30,8 +21,9 @@ public class InspectionController : MonoBehaviour
         indicator.SetActive(false);
         inspectionCanvas = GameObject.FindGameObjectWithTag("InspectionCanvas");
         inspectionCanvas.SetActive(false);
-        inInspectionRange = false;
-        inInspection = false;   
+        inRange = false;
+        inInteraction = false;   
+        closestToPlayer = false;  
 
         // TODO
         // grab these values whereever they're saved
@@ -45,7 +37,7 @@ public class InspectionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(inInspectionRange){
+        if(inRange && closestToPlayer){
             EnterDialogue();
         }
     }
@@ -54,7 +46,7 @@ public class InspectionController : MonoBehaviour
         if (other.gameObject.layer == (int) Layers.Player){
             Debug.Log("in inspection range");
             playerRb = other.gameObject.GetComponent<Rigidbody2D>();
-            inInspectionRange = true;
+            inRange = true;
             indicator.SetActive(true);
         }
     }
@@ -62,7 +54,7 @@ public class InspectionController : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.layer == (int) Layers.Player){
             Debug.Log("exiting inspection range");
-            inInspectionRange = false;
+            inRange = false;
             indicator.SetActive(false);
         }
     }
@@ -71,7 +63,7 @@ public class InspectionController : MonoBehaviour
         if (Input.GetButtonDown("Interact") && !inspectionCanvas.activeSelf){
             Debug.Log("Entering Inspection");
             // Setting UI components
-            inInspection = true;            
+            inInteraction = true;            
             inspectionCanvas.SetActive(true);
             // Pause player controls TODO
             playerRb.bodyType = RigidbodyType2D.Static;
