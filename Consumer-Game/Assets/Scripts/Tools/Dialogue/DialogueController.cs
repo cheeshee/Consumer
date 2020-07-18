@@ -12,7 +12,7 @@ public class DialogueController : MonoBehaviour
     protected bool inRange;
     protected bool inInteraction;
     protected Rigidbody2D playerRb;
-    private GameObject dialogueCanvas;
+    protected GameObject textDisplayCanvas;
 
     protected bool closestToPlayer;
 
@@ -22,24 +22,26 @@ public class DialogueController : MonoBehaviour
 
     // dialgoue progress variables
     protected int stage;              // mark stages or event triggers
-    private float currentConvoID;   // mark conversation to be held at current stage, s.x where s is the stage number, 
+    protected float currentSectionID;   // mark conversation to be held at current stage, s.x where s is the stage number, 
     //currently max 10 conversations each stage change above as needed
    
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         playerDetectionCollider = GetComponent<Collider2D>();
         indicator = transform.GetChild(0).gameObject;
         indicatorAnimator = indicator.GetComponent<Animator>();
         indicator.SetActive(false);
-        dialogueCanvas = GameObject.FindGameObjectWithTag("DialogueCanvas");
+        textDisplayCanvas = GameObject.FindGameObjectWithTag("DialogueCanvas");
         // dialogueCanvas.SetActive(false);
         inRange = false;
         inInteraction = false; 
         closestToPlayer = false;  
 
+        // TODO
+        // grab these values whereever they're saved
         stage = 0;
-        currentConvoID = 0;
+        currentSectionID = 0;
 
         // load the dialogue text
         loadDialogueJSON();
@@ -47,14 +49,14 @@ public class DialogueController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if(inRange && closestToPlayer){
             EnterDialogue();
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other){
+    protected virtual void OnTriggerEnter2D(Collider2D other){
         if (other.gameObject.layer == (int) Layers.Player){
             Debug.Log("in talking range");
             playerRb = other.gameObject.GetComponent<Rigidbody2D>();
@@ -63,7 +65,7 @@ public class DialogueController : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other) {
+    protected virtual void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.layer == (int) Layers.Player){
             Debug.Log("exiting talking range");
             inRange = false;
@@ -71,19 +73,19 @@ public class DialogueController : MonoBehaviour
         }
     }
 
-    private void EnterDialogue(){
-        if (Input.GetButtonDown("Interact") && !dialogueCanvas.activeSelf){
+    protected virtual void EnterDialogue(){
+        if (Input.GetButtonDown("Interact") && !textDisplayCanvas.activeSelf){
             Debug.Log("Entering Dialogue");
             // Setting UI components
             inInteraction = true;            
-            dialogueCanvas.SetActive(true);
+            textDisplayCanvas.SetActive(true);
             // Pause player controls TODO
             playerRb.bodyType = RigidbodyType2D.Static;
             // Pass lines to be displayed
-            dialogueCanvas.GetComponent<DialogueDisplayController>().FeedLines(textJSON["stages"][stage][(int)(currentConvoID - stage) * 10].AsArray);
+            textDisplayCanvas.GetComponent<DialogueDisplayController>().FeedLines(textJSON["stages"][stage][(int)(currentSectionID - stage) * 10].AsArray);
             // update stage and currentConvoID TODO
         }
-        if (dialogueCanvas.activeSelf){            
+        if (textDisplayCanvas.activeSelf){            
             playerRb.bodyType = RigidbodyType2D.Static;
             indicator.SetActive(false);
         } else {
@@ -92,7 +94,7 @@ public class DialogueController : MonoBehaviour
         }
     }
 
-    private void createSampleJSON(){
+    protected virtual void createSampleJSON(){
          //test // Testing
         JSONObject yeet = new JSONObject();
         // yeet.Add("currentStage", 0);
@@ -119,7 +121,7 @@ public class DialogueController : MonoBehaviour
         File.WriteAllText(path, yeet.ToString());
     }
 
-    private void loadDialogueJSON(){
+    protected virtual void loadDialogueJSON(){
         textJSON = (JSONObject) JSON.Parse(textFile.ToString());
         // will have to change and check these as we go, possibly skip to next stage
         // TODO

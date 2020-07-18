@@ -4,53 +4,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using SimpleJSON;
 
-public class InspectionDisplayController : MonoBehaviour
+public class InspectionDisplayController : DialogueDisplayController
 {
-    private GameObject objectBox;
-    private Text objectName;
-    private GameObject textBox;
-    private Text descriptionText;
-    private JSONArray description;
-
-    private enum Line{OBJECT_NAME, SENTENCE}
-    private int sentenceIndex;         // index for sentence in conversation
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        objectBox = transform.GetChild(0).gameObject;
-        objectName = objectBox.GetComponentInChildren<Text>();
-        textBox = transform.GetChild(1).gameObject;
-        descriptionText = textBox.GetComponentInChildren<Text>();
-        sentenceIndex = 0;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (description == null){
-            gameObject.SetActive(false);
-        } else {
-            DetectNextLine();
-        }
-    }
-
-    public int FeedLines(JSONArray lines){
+    public override int FeedLines(JSONArray lines){
         Debug.Log("displaying text");
         Debug.Log(lines);
         sentenceIndex = 0;
         description = lines;
-        objectName.text = description[sentenceIndex][(int)Line.OBJECT_NAME];
+        headerName.text = description[sentenceIndex][(int)Line.HEADER_NAME];
         descriptionText.text = description[sentenceIndex][(int)Line.SENTENCE];
         
+        // may treat things differently
+        // same for now
         return 0;
     }
 
-    private void DetectNextLine(){
+    // TODO
+    // change this as needed, possibly go back and forth between sentences
+    protected override void DetectNextLine(){
         if (Input.anyKeyDown){
             sentenceIndex++;
             if (sentenceIndex < description.Count) {
-                objectName.text = description[sentenceIndex][(int)Line.OBJECT_NAME];
+                headerName.text = description[sentenceIndex][(int)Line.HEADER_NAME];
                 descriptionText.text = description[sentenceIndex][(int)Line.SENTENCE];
             }
             else {
@@ -59,4 +34,5 @@ public class InspectionDisplayController : MonoBehaviour
 
         }
     }
+
 }

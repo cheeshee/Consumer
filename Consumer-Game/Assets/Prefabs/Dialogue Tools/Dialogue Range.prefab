@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1725186110919027686}
   - component: {fileID: 1725186110919027685}
   - component: {fileID: 1725186110919027684}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Dialogue Range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 5920472315868871995}
   - component: {fileID: 3321574905351011857}
   - component: {fileID: 1951109336031051821}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}

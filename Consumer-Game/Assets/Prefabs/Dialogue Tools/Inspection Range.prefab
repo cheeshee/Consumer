@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3999406904229581445}
   - component: {fileID: 5454311669174948271}
   - component: {fileID: 7449302286172465168}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 8239360768789218392}
   - component: {fileID: 8239360768789218395}
   - component: {fileID: 5223291644575069079}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Inspection Range
   m_TagString: Untagged
   m_Icon: {fileID: 0}

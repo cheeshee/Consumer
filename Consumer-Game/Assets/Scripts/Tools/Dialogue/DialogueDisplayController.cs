@@ -6,54 +6,54 @@ using SimpleJSON;
 
 public class DialogueDisplayController : MonoBehaviour
 {
-    private GameObject speakerBox;
-    private Text speakerName;
-    private GameObject textBox;
-    private Text dialogueText;
-    private JSONArray conversation;
+    protected GameObject headerBox;
+    protected Text headerName;
+    protected GameObject textBox;
+    protected Text descriptionText;
+    protected JSONArray description;
 
-    private enum Line{SPEAKER_NAME, SENTENCE}
-    private int sentenceIndex;         // index for sentence in conversation
+    protected enum Line{HEADER_NAME, SENTENCE}
+    protected int sentenceIndex;         // index for sentence in conversation
 
     
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        speakerBox = transform.GetChild(0).gameObject;
-        speakerName = speakerBox.GetComponentInChildren<Text>();
+        headerBox = transform.GetChild(0).gameObject;
+        headerName = headerBox.GetComponentInChildren<Text>();
         textBox = transform.GetChild(1).gameObject;
-        dialogueText = textBox.GetComponentInChildren<Text>();
+        descriptionText = textBox.GetComponentInChildren<Text>();
         sentenceIndex = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        if (conversation == null){
+        if (description == null){
             gameObject.SetActive(false);
         } else {
             DetectNextLine();
         }
     }
 
-    public int FeedLines(JSONArray lines){
+    public virtual int FeedLines(JSONArray lines){
         Debug.Log("displaying text");
         Debug.Log(lines);
         sentenceIndex = 0;
-        conversation = lines;
-        speakerName.text = conversation[sentenceIndex][(int)Line.SPEAKER_NAME];
-        dialogueText.text = conversation[sentenceIndex][(int)Line.SENTENCE];
+        description = lines;
+        headerName.text = description[sentenceIndex][(int)Line.HEADER_NAME];
+        descriptionText.text = description[sentenceIndex][(int)Line.SENTENCE];
         
 
         return 0;
     }
 
-    private void DetectNextLine(){
+    protected virtual void DetectNextLine(){
         if (Input.anyKeyDown){
             sentenceIndex++;
-            if (sentenceIndex < conversation.Count) {
-                speakerName.text = conversation[sentenceIndex][(int)Line.SPEAKER_NAME];
-                dialogueText.text = conversation[sentenceIndex][(int)Line.SENTENCE];
+            if (sentenceIndex < description.Count) {
+                headerName.text = description[sentenceIndex][(int)Line.HEADER_NAME];
+                descriptionText.text = description[sentenceIndex][(int)Line.SENTENCE];
             }
             else {
                 gameObject.SetActive(false);

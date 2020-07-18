@@ -105,10 +105,9 @@ public class PlayerManager : MonoBehaviour
 
     private void FindClosestInteraction(){
         // change layerMask as necessary TODO
-        interactionLayerMask = 1<<8 | 1<<9;
-        interactionLayerMask = ~interactionLayerMask;
-        hitLeft = Physics2D.Raycast(transform.position, -Vector2.right, 5f, interactionLayerMask);
-        hitRight = Physics2D.Raycast(transform.position, Vector2.right, 5f, interactionLayerMask);
+        interactionLayerMask = 1<<10;
+        hitLeft = Physics2D.Raycast(transform.position, -Vector2.right, 2f, interactionLayerMask);
+        hitRight = Physics2D.Raycast(transform.position, Vector2.right, 2f, interactionLayerMask);
 
         // check left
         if (hitLeft.collider != null) {
