@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController
 {
     protected Rigidbody2D charRb;
-    protected BoxCollider2D charBoxCol;
+    protected CapsuleCollider2D charBoxCol;
     protected ContactFilter2D contactFilter;
     protected float health = 100;
     
@@ -49,17 +49,27 @@ public class PlayerController
     protected bool movingRight = false;
     protected bool movingLeft = false;
     protected Vector2 normalVector = new Vector2(0f, 1f);
-    protected Vector2 perpendicularVector = new Vector2(1f, 0f);
+    protected Vector2 slopePerpendicularVector = new Vector2(1f, 0f);
+    protected float slopeDownAngle;
+    protected float slopeDownAngleOld;
+    protected float slopeSideAngle;
+    protected float maxSlopeAngle = 45;
     [SerializeField] protected float deacceleration = 10f;
     [SerializeField] protected float acceleration = 5f;
     protected bool isGrounded = false;
+    protected bool isOnSlope = false;
+    protected bool isJumping = false;
+    protected bool canJump = false;
+    protected bool canWalkOnSlope = false;
     protected Vector2 colliderSize;
     protected Vector2 groundCheckPosition;
     protected PlayerManager playerManagerComp;
     protected float groundCheckRadius = 0.1f;
     protected LayerMask playerLayerMask;
     protected Vector2 playerScale;
-
+    protected Vector2 currentPosition;
+    protected float slopeCheckDistance = 0.5f;
+    protected float jumpVelocity = 5f;
 
     // When player manager switches to using this controller
     public virtual void OnSwitch(GameObject player)
@@ -73,7 +83,7 @@ public class PlayerController
         //rigidbody
         playerLayerMask = Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("Player"));
         charRb = player.GetComponent<Rigidbody2D>();
-        charBoxCol = player.GetComponent<BoxCollider2D>();
+        charBoxCol = player.GetComponent<CapsuleCollider2D>();
         playerManagerComp = player.GetComponent<PlayerManager>();
         colliderSize = charBoxCol.size;
         playerScale = playerManagerComp.GetLocalScale();
@@ -117,8 +127,11 @@ public class PlayerController
 
     public virtual void Jump()
     {
-        Debug.Log("jumping");
-        charRb.AddForce(new Vector2(0f, jumpMultiplier));
+        if(canJump){
+            canJump = false;
+            isJumping = true;
+            playerVelocityY = jumpVelocity;
+        }
     }
 
     public virtual void Attack()
@@ -133,10 +146,13 @@ public class PlayerController
     }
 
     public virtual void FixedUpdate() {
-
-        ComputeHorizontalVelocity();
+        currentPosition = playerManagerComp.GetPosition();
+        groundCheckPosition = new Vector2(currentPosition.x, currentPosition.y - (colliderSize.y / 2 * playerScale.y));
+        
         GroundCheck();
-        Debug.Log(isGrounded);
+        SlopeCheck();
+        ComputeHorizontalVelocity();
+        //Debug.Log(isGrounded);
 
         //Debug.Log(charRb);
         charRb.velocity = new Vector2 (playerVelocityX, playerVelocityY);
@@ -145,16 +161,16 @@ public class PlayerController
 
     protected virtual void ComputeHorizontalVelocity() {
         
-        if (movingRight && Vector2.Dot(charRb.velocity,perpendicularVector) < 0){
+        if (movingRight && Vector2.Dot(charRb.velocity,slopePerpendicularVector) < 0){
             playerVelocityX = 0;
         }
-        else if (movingRight && Vector2.Dot(charRb.velocity,perpendicularVector) >= 0){
+        else if (movingRight && Vector2.Dot(charRb.velocity,slopePerpendicularVector) >= 0){
             playerVelocityX = Mathf.Clamp(playerVelocityX + acceleration, 0f, maxSpeed);
         }
-        else if (movingLeft && Vector2.Dot(charRb.velocity,perpendicularVector) > 0){
+        else if (movingLeft && Vector2.Dot(charRb.velocity,slopePerpendicularVector) > 0){
             playerVelocityX = 0;
         }
-        else if (movingLeft && Vector2.Dot(charRb.velocity,perpendicularVector) <= 0){
+        else if (movingLeft && Vector2.Dot(charRb.velocity,slopePerpendicularVector) <= 0){
             playerVelocityX = Mathf.Clamp(playerVelocityX - acceleration, -maxSpeed, 0f);
         }
         else if (!movingLeft && !movingRight){
@@ -168,17 +184,105 @@ public class PlayerController
     }
 
 
+
+    protected virtual void ComputeVelocity(){
+        if (isGrounded && !isOnSlope && !isJumping) //if not on slope
+        {
+
+        }
+        else if (isGrounded && isOnSlope && !isJumping) //If on slope
+        {
+
+        }
+        else if (!isGrounded) //If in air
+        {
+
+        }
+        //TODO
+    }
+
+
     protected virtual void SlopeCheck(){
+        SlopeCheckHorizontal();
+        SlopeCheckVertical();
+    }
+
+
+    protected virtual void SlopeCheckHorizontal(){
+        RaycastHit2D slopeHitFront = Physics2D.Raycast(groundCheckPosition, Vector2.right, slopeCheckDistance, playerLayerMask);
+        RaycastHit2D slopeHitBack = Physics2D.Raycast(groundCheckPosition, Vector2.left, slopeCheckDistance, playerLayerMask);
+
+        if (slopeHitFront)
+        {
+            isOnSlope = true;
+
+            slopeSideAngle = Vector2.Angle(slopeHitFront.normal, Vector2.up);
+
+        }
+        else if (slopeHitBack)
+        {
+            isOnSlope = true;
+
+            slopeSideAngle = Vector2.Angle(slopeHitBack.normal, Vector2.up);
+        }
+        else
+        {
+            slopeSideAngle = 0.0f;
+            isOnSlope = false;
+        }
+    }
+
+
+    protected virtual void SlopeCheckVertical(){
+        RaycastHit2D hit = Physics2D.Raycast(groundCheckPosition, Vector2.down, slopeCheckDistance, playerLayerMask);
+        if (hit){
+                slopePerpendicularVector = PerpVector(hit.normal);
+                slopeDownAngle = Vector2.Angle(hit.normal, Vector2.up);
+
+                if(slopeDownAngle != slopeDownAngleOld){
+                    isOnSlope = true;
+                }                       
+
+            slopeDownAngleOld = slopeDownAngle; 
+        }
+
+        if (slopeDownAngle > maxSlopeAngle || slopeSideAngle > maxSlopeAngle)
+        {
+            canWalkOnSlope = false;
+        }
+        else
+        {
+            canWalkOnSlope = true;
+        }
+
+       /*  if (isOnSlope && canWalkOnSlope && !movingRight && !movingLeft)
+        {
+            rb.sharedMaterial = fullFriction;
+        }
+        else
+        {
+            rb.sharedMaterial = noFriction;
+        } */
+        //TODO
         
     }
 
     protected virtual void GroundCheck(){
-        Vector2 currentPosition = playerManagerComp.GetPosition();
-
-        groundCheckPosition = new Vector2(currentPosition.x, currentPosition.y - (colliderSize.y / 2 * playerScale.y));
-        Debug.Log(groundCheckPosition);
-        //Debug.Log(colliderSize);
         isGrounded = Physics2D.OverlapCircle(groundCheckPosition, groundCheckRadius, playerLayerMask);
+        
+        if(charRb.velocity.y <= 0.0f)
+        {
+            isJumping = false;
+        }
+
+        if(isGrounded && !isJumping && slopeDownAngle <= maxSlopeAngle)
+        {
+            canJump = true;
+        }
+   }
+
+    protected virtual Vector2 PerpVector(Vector2 vector){
+        return new Vector2(vector.y, -vector.x);
     }
 
 }
