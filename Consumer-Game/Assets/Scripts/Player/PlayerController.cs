@@ -65,12 +65,12 @@ public class PlayerController
     protected Vector2 colliderSize;
     protected Vector2 groundCheckPosition;
     protected PlayerManager playerManagerComp;
-    protected float groundCheckRadius = 0.5f;
+    protected float groundCheckRadius = 0.1f;
     protected LayerMask playerLayerMask;
     protected Vector2 playerScale;
     protected Vector2 currentPosition;
-    protected float slopeCheckDistance = 0.5f;
-    protected float jumpVelocity = 5f;
+    protected float slopeCheckDistance = 0.1f;
+    protected float jumpVelocity = 4f;
 
     // When player manager switches to using this controller
     public virtual void OnSwitch(GameObject player)
@@ -132,7 +132,6 @@ public class PlayerController
             canJump = false;
             isJumping = true;
             jumpNextFixedUpdate = true;
-            playerVelocityY = jumpVelocity;
         }
     }
 
@@ -189,24 +188,26 @@ public class PlayerController
 
     protected virtual void ComputeVelocity(){
         ComputeHorizontalVelocity();
-        Debug.Log("Grounded:" + isGrounded + "\n" + "OnSlope" + isOnSlope);
+        Debug.Log("Grounded:" + isGrounded + " " + "OnSlope:" + isOnSlope + " " + "isJumping:" + isJumping + " " + "canJump:" + canJump + " " + "jumpNextUpdate" + jumpNextFixedUpdate);
 
-        if (isGrounded && !isOnSlope && !isJumping) //if not on slope
+        if (isGrounded && jumpNextFixedUpdate){
+            charRb.AddForce(new Vector2 (0f, jumpVelocity), ForceMode2D.Impulse);
+            jumpNextFixedUpdate = false;
+        }
+        else if (isGrounded && !isOnSlope && !isJumping) //if not on slope
         {
-            charRb.velocity = new Vector2 (playerVelocityX, 0f);
+            charRb.velocity = new Vector2 (playerVelocityX, charRb.velocity.y);
         }
         else if (isGrounded && isOnSlope && !isJumping) //If on slope
         {
             charRb.velocity = new Vector2 (playerVelocityX * slopePerpendicularVector.x, playerVelocityX * slopePerpendicularVector.y);
-        }
-        else if (isGrounded && jumpNextFixedUpdate){
-             charRb.velocity = new Vector2 (playerVelocityX, playerVelocityY);
         }
         else if (!isGrounded) //If in air
         {
             charRb.velocity = new Vector2 (playerVelocityX, charRb.velocity.y);
         }
         //TODO
+
         
     }
 
