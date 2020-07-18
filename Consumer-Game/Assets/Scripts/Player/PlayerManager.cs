@@ -112,18 +112,19 @@ public class PlayerManager : MonoBehaviour
 
         // check left
         if (hitLeft.collider != null) {
-            distToColliderLeft = Mathf.Abs(hitLeft.point.x - transform.position.x); 
+            distToColliderLeft = Mathf.Abs(hitLeft.centroid.x - transform.position.x); 
         } else {
             distToColliderLeft = Mathf.Infinity;
         }
         // check right
         if (hitRight.collider != null) {
-            distToColliderRight = Mathf.Abs(hitRight.point.x - transform.position.x); 
+            distToColliderRight = Mathf.Abs(hitRight.centroid.x - transform.position.x); 
         } else {
             distToColliderRight = Mathf.Infinity;
         }
         
         if (closestInteraction != null) {
+            
             closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(false);
         }
 

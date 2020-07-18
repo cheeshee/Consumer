@@ -18,6 +18,7 @@ public class InspectionController : DialogueController
     {
         playerDetectionCollider = GetComponent<Collider2D>();
         indicator = transform.GetChild(0).gameObject;
+        indicatorAnimator = indicator.GetComponent<Animator>();
         indicator.SetActive(false);
         inspectionCanvas = GameObject.FindGameObjectWithTag("InspectionCanvas");
         // inspectionCanvas.SetActive(false);
