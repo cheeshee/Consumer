@@ -60,11 +60,12 @@ public class PlayerController
     protected bool isOnSlope = false;
     protected bool isJumping = false;
     protected bool canJump = false;
+    protected bool jumpNextFixedUpdate = false;
     protected bool canWalkOnSlope = false;
     protected Vector2 colliderSize;
     protected Vector2 groundCheckPosition;
     protected PlayerManager playerManagerComp;
-    protected float groundCheckRadius = 0.1f;
+    protected float groundCheckRadius = 0.5f;
     protected LayerMask playerLayerMask;
     protected Vector2 playerScale;
     protected Vector2 currentPosition;
@@ -130,6 +131,7 @@ public class PlayerController
         if(canJump){
             canJump = false;
             isJumping = true;
+            jumpNextFixedUpdate = true;
             playerVelocityY = jumpVelocity;
         }
     }
@@ -151,24 +153,24 @@ public class PlayerController
         
         GroundCheck();
         SlopeCheck();
-        ComputeHorizontalVelocity();
+        ComputeVelocity();
         //Debug.Log(isGrounded);
 
         //Debug.Log(charRb);
-        charRb.velocity = new Vector2 (playerVelocityX, playerVelocityY);
+        
     }
 
 
     protected virtual void ComputeHorizontalVelocity() {
         
         if (movingRight && Vector2.Dot(charRb.velocity,slopePerpendicularVector) < 0){
-            playerVelocityX = 0;
+            playerVelocityX = acceleration;
         }
         else if (movingRight && Vector2.Dot(charRb.velocity,slopePerpendicularVector) >= 0){
             playerVelocityX = Mathf.Clamp(playerVelocityX + acceleration, 0f, maxSpeed);
         }
         else if (movingLeft && Vector2.Dot(charRb.velocity,slopePerpendicularVector) > 0){
-            playerVelocityX = 0;
+            playerVelocityX = -acceleration;
         }
         else if (movingLeft && Vector2.Dot(charRb.velocity,slopePerpendicularVector) <= 0){
             playerVelocityX = Mathf.Clamp(playerVelocityX - acceleration, -maxSpeed, 0f);
@@ -186,19 +188,26 @@ public class PlayerController
 
 
     protected virtual void ComputeVelocity(){
+        ComputeHorizontalVelocity();
+        Debug.Log("Grounded:" + isGrounded + "\n" + "OnSlope" + isOnSlope);
+
         if (isGrounded && !isOnSlope && !isJumping) //if not on slope
         {
-
+            charRb.velocity = new Vector2 (playerVelocityX, 0f);
         }
         else if (isGrounded && isOnSlope && !isJumping) //If on slope
         {
-
+            charRb.velocity = new Vector2 (playerVelocityX * slopePerpendicularVector.x, playerVelocityX * slopePerpendicularVector.y);
+        }
+        else if (isGrounded && jumpNextFixedUpdate){
+             charRb.velocity = new Vector2 (playerVelocityX, playerVelocityY);
         }
         else if (!isGrounded) //If in air
         {
-
+            charRb.velocity = new Vector2 (playerVelocityX, charRb.velocity.y);
         }
         //TODO
+        
     }
 
 
@@ -244,6 +253,8 @@ public class PlayerController
                 }                       
 
             slopeDownAngleOld = slopeDownAngle; 
+            Debug.DrawRay(hit.point, slopePerpendicularVector, Color.blue);
+            Debug.DrawRay(hit.point, hit.normal, Color.green);
         }
 
         if (slopeDownAngle > maxSlopeAngle || slopeSideAngle > maxSlopeAngle)
