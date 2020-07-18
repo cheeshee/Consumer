@@ -38,7 +38,6 @@ public class InspectionController : DialogueController
 
     protected override void EnterDialogue(){
         if (Input.GetButtonDown("Interact") && !textDisplayCanvas.activeSelf){
-            Debug.Log("Entering Inspection");
             // Setting UI components
             inInteraction = true;            
             textDisplayCanvas.SetActive(true);

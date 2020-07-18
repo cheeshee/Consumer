@@ -127,13 +127,11 @@ public class PlayerManager : MonoBehaviour
             closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(false);
         }
 
-        Debug.Log(distToColliderLeft + " vs " + distToColliderRight);
         if(distToColliderLeft < distToColliderRight){
             closestInteraction = hitLeft.collider;
             closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
         } else {
             closestInteraction = hitRight.collider;
-            Debug.Log(closestInteraction + " is closest");
             closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
 
         }

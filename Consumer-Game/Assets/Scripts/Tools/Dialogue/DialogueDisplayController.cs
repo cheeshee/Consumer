@@ -37,7 +37,6 @@ public class DialogueDisplayController : MonoBehaviour
     }
 
     public virtual int FeedLines(JSONArray lines){
-        Debug.Log("displaying text");
         Debug.Log(lines);
         sentenceIndex = 0;
         description = lines;

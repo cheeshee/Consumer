@@ -58,7 +58,6 @@ public class DialogueController : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D other){
         if (other.gameObject.layer == (int) Layers.Player){
-            Debug.Log("in talking range");
             playerRb = other.gameObject.GetComponent<Rigidbody2D>();
             inRange = true;
             indicator.SetActive(true);
@@ -67,7 +66,6 @@ public class DialogueController : MonoBehaviour
 
     protected virtual void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.layer == (int) Layers.Player){
-            Debug.Log("exiting talking range");
             inRange = false;
             indicator.SetActive(false);
         }
@@ -75,7 +73,6 @@ public class DialogueController : MonoBehaviour
 
     protected virtual void EnterDialogue(){
         if (Input.GetButtonDown("Interact") && !textDisplayCanvas.activeSelf){
-            Debug.Log("Entering Dialogue");
             // Setting UI components
             inInteraction = true;            
             textDisplayCanvas.SetActive(true);

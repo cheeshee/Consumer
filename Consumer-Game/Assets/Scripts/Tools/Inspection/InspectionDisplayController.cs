@@ -7,7 +7,6 @@ using SimpleJSON;
 public class InspectionDisplayController : DialogueDisplayController
 {
     public override int FeedLines(JSONArray lines){
-        Debug.Log("displaying text");
         Debug.Log(lines);
         sentenceIndex = 0;
         description = lines;
