@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerController
 {
     protected Rigidbody2D charRb;
+    protected BoxCollider2D charBoxCol;
+    protected ContactFilter2D contactFilter;
     protected float health = 100;
     
     // variables for checking how environment interacts with player
@@ -50,15 +52,31 @@ public class PlayerController
     protected Vector2 perpendicularVector = new Vector2(1f, 0f);
     [SerializeField] protected float deacceleration = 10f;
     [SerializeField] protected float acceleration = 5f;
-
+    protected bool isGrounded = false;
+    protected Vector2 colliderSize;
+    protected Vector2 groundCheckPosition;
+    protected PlayerManager playerManagerComp;
+    protected float groundCheckRadius = 0.1f;
+    protected LayerMask playerLayerMask;
+    protected Vector2 playerScale;
 
 
     // When player manager switches to using this controller
     public virtual void OnSwitch(GameObject player)
     {
+
+        contactFilter.useTriggers = false; //Won't check collisions against triggers
+        contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("Player"))); 
+        //use physics2D settings to determine what layers we're going to check collisions against
+        contactFilter.useLayerMask = true;
         //change everything about the scene componenets
         //rigidbody
+        playerLayerMask = Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("Player"));
         charRb = player.GetComponent<Rigidbody2D>();
+        charBoxCol = player.GetComponent<BoxCollider2D>();
+        playerManagerComp = player.GetComponent<PlayerManager>();
+        colliderSize = charBoxCol.size;
+        playerScale = playerManagerComp.GetLocalScale();
         //charRb.bodyType = RigidbodyType2D.Dynamic;
         //sprite
         //animator
@@ -116,6 +134,17 @@ public class PlayerController
 
     public virtual void FixedUpdate() {
 
+        ComputeHorizontalVelocity();
+        GroundCheck();
+        Debug.Log(isGrounded);
+
+        //Debug.Log(charRb);
+        charRb.velocity = new Vector2 (playerVelocityX, playerVelocityY);
+    }
+
+
+    protected virtual void ComputeHorizontalVelocity() {
+        
         if (movingRight && Vector2.Dot(charRb.velocity,perpendicularVector) < 0){
             playerVelocityX = 0;
         }
@@ -136,9 +165,20 @@ public class PlayerController
                 playerVelocityX = Mathf.Clamp(playerVelocityX - deacceleration, 0f, maxSpeed);
             }
         }
-
-
-        //Debug.Log(charRb);
-        charRb.velocity = new Vector2 (playerVelocityX, playerVelocityY);
     }
+
+
+    protected virtual void SlopeCheck(){
+        
+    }
+
+    protected virtual void GroundCheck(){
+        Vector2 currentPosition = playerManagerComp.GetPosition();
+
+        groundCheckPosition = new Vector2(currentPosition.x, currentPosition.y - (colliderSize.y / 2 * playerScale.y));
+        Debug.Log(groundCheckPosition);
+        //Debug.Log(colliderSize);
+        isGrounded = Physics2D.OverlapCircle(groundCheckPosition, groundCheckRadius, playerLayerMask);
+    }
+
 }

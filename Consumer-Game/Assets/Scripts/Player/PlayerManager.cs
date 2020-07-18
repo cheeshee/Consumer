@@ -82,4 +82,12 @@ public class PlayerManager : MonoBehaviour
         } 
         characterSlots[currCharacter].OnSwitch(gameObject);
     }
+
+    public Vector2 GetPosition(){
+        return gameObject.transform.position;
+    }
+
+    public Vector2 GetLocalScale(){
+        return gameObject.transform.localScale;
+    }
 }
