@@ -280,6 +280,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4cf04a892464245a7fa9078d9b4ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fullFriction: {fileID: 6200000, guid: 564dca2430fea364bb5ef2ee7cdfe789, type: 2}
+  noFriction: {fileID: 6200000, guid: 5cd0a3e23ed38534ba2fa40f363e951e, type: 2}
 --- !u!70 &433918457
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

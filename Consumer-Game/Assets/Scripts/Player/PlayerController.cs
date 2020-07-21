@@ -72,6 +72,7 @@ public class PlayerController
     protected float slopeCheckDistance = 0.5f;
     protected float jumpVelocity = 4f;
     protected float jumpingFloatModifier = 0.5f;
+    protected float initialGravityModifier = 1f;
 
     // When player manager switches to using this controller
     public virtual void OnSwitch(GameObject player)
@@ -128,15 +129,24 @@ public class PlayerController
 
     public virtual void Jump()
     {
-        if(canJump){
-            canJump = false;
-            isJumping = true;
-            jumpNextFixedUpdate = true;
-            charRb.gravityScale = jumpingFloatModifier;
+        if (Input.GetButton("Jump")){
+            if(canJump){
+                canJump = false;
+                isJumping = true;
+                jumpNextFixedUpdate = true;
+                charRb.gravityScale = jumpingFloatModifier;
+            }
+            else if (isJumping){
+                charRb.gravityScale = jumpingFloatModifier;
+            }
+            else if (!isJumping){
+                charRb.gravityScale = initialGravityModifier;
+            }
         }
-        else if (isJumping){
-            charRb.gravityScale = jumpingFloatModifier;
+        else {
+            charRb.gravityScale = initialGravityModifier;
         }
+        
     }
 
     public virtual void Attack()
@@ -271,15 +281,7 @@ public class PlayerController
             canWalkOnSlope = true;
         }
 
-       /*  if (isOnSlope && canWalkOnSlope && !movingRight && !movingLeft)
-        {
-            rb.sharedMaterial = fullFriction;
-        }
-        else
-        {
-            rb.sharedMaterial = noFriction;
-        } */
-        //TODO
+        charRb.sharedMaterial = playerManagerComp.GetFriction(isOnSlope && canWalkOnSlope && !movingRight && !movingLeft);
         
     }
 

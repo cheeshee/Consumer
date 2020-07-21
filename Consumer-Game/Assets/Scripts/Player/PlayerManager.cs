@@ -15,6 +15,9 @@ public class PlayerManager : MonoBehaviour
     private float distToColliderLeft;
     private float distToColliderRight;
     private int interactionLayerMask;
+
+    private PhysicsMaterial2D fullFriction;
+    private PhysicsMaterial2D noFriction;
     RaycastHit2D hitLeft;
     RaycastHit2D hitRight;
     
@@ -27,6 +30,9 @@ public class PlayerManager : MonoBehaviour
         // initialize raycast variables
         distToColliderLeft = Mathf.Infinity;
         distToColliderRight = Mathf.Infinity;
+        fullFriction = Resources.Load<PhysicsMaterial2D>("PhysicsMaterial/" + "FullFrictionMaterial");
+        noFriction = Resources.Load<PhysicsMaterial2D>("PhysicsMaterial/" + "NoFrictionMaterial");
+
 
         // testing stuff
         characterSlots[0] = new InitialController(gameObject);
@@ -57,10 +63,9 @@ public class PlayerManager : MonoBehaviour
 
     private void DetectJump()
     {
-        if(Input.GetButton("Jump"))
-        {
-            characterSlots[currCharacter].Jump();
-        }
+
+        characterSlots[currCharacter].Jump();
+
     }
 
     private void DetectMove()
@@ -144,6 +149,17 @@ public class PlayerManager : MonoBehaviour
                 closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
 
             }
+        }
+    }
+
+
+    public PhysicsMaterial2D GetFriction (bool friction){
+        if (friction){
+            return fullFriction;
+        
+        }
+        else{
+            return noFriction;
         }
     }
 }
