@@ -101,7 +101,6 @@ public class PlayerController
         
 
         if (Input.GetButton("Move")){
-            Debug.Log("moving");
             //Right Direction
             if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > charRb.position.x + xRange)
             {
