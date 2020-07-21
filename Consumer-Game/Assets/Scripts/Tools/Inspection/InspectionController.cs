@@ -53,6 +53,7 @@ public class InspectionController : DialogueController
             indicator.SetActive(false);
         } else {
             playerRb.bodyType = RigidbodyType2D.Dynamic;
+            Debug.Log("should be dynamic now: " + playerRb.bodyType);
             indicator.SetActive(true);
         }
     }
