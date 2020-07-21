@@ -57,7 +57,7 @@ public class PlayerManager : MonoBehaviour
 
     private void DetectJump()
     {
-        if(Input.GetButtonDown("Jump"))
+        if(Input.GetButton("Jump"))
         {
             characterSlots[currCharacter].Jump();
         }
@@ -103,6 +103,14 @@ public class PlayerManager : MonoBehaviour
         characterSlots[currCharacter].OnSwitch(gameObject);
     }
 
+    public Vector2 GetPosition(){
+        return gameObject.transform.position;
+    }
+
+    public Vector2 GetLocalScale(){
+        return gameObject.transform.localScale;
+    }
+
     private void FindClosestInteraction(){
         // change layerMask as necessary TODO
         interactionLayerMask = 1<<10;
@@ -127,13 +135,15 @@ public class PlayerManager : MonoBehaviour
             closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(false);
         }
 
-        if(distToColliderLeft < distToColliderRight){
-            closestInteraction = hitLeft.collider;
-            closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
-        } else {
-            closestInteraction = hitRight.collider;
-            closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
+        if (distToColliderLeft != Mathf.Infinity || distToColliderRight != Mathf.Infinity) {
+            if(distToColliderLeft < distToColliderRight){
+                closestInteraction = hitLeft.collider;
+                closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
+            } else {
+                closestInteraction = hitRight.collider;
+                closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
 
+            }
         }
     }
 }
