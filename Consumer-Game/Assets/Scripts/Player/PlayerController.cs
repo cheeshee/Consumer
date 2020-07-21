@@ -65,12 +65,13 @@ public class PlayerController
     protected Vector2 colliderSize;
     protected Vector2 groundCheckPosition;
     protected PlayerManager playerManagerComp;
-    protected float groundCheckRadius = 0.1f;
+    protected float groundCheckRadius = 0.5f;
     protected LayerMask playerLayerMask;
     protected Vector2 playerScale;
     protected Vector2 currentPosition;
-    protected float slopeCheckDistance = 0.1f;
+    protected float slopeCheckDistance = 0.5f;
     protected float jumpVelocity = 4f;
+    protected float jumpingFloatModifier = 0.5f;
 
     // When player manager switches to using this controller
     public virtual void OnSwitch(GameObject player)
@@ -132,6 +133,10 @@ public class PlayerController
             canJump = false;
             isJumping = true;
             jumpNextFixedUpdate = true;
+            charRb.gravityScale = jumpingFloatModifier;
+        }
+        else if (isJumping){
+            charRb.gravityScale = jumpingFloatModifier;
         }
     }
 

@@ -37,7 +37,7 @@ public class PlayerManager : MonoBehaviour
 
     private void DetectJump()
     {
-        if(Input.GetButtonDown("Jump"))
+        if(Input.GetButton("Jump"))
         {
             characterSlots[currCharacter].Jump();
         }
