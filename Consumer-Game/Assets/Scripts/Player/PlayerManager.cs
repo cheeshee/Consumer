@@ -8,16 +8,32 @@ public class PlayerManager : MonoBehaviour
     private PlayerController[] characterSlots = new PlayerController[8];
     private int currCharacter = 0;
     private Rigidbody2D playerRb;
+
+    // checking interactions for raycast
+    private Collider2D closestInteraction;
+    private Collider2D currClosest;
+    private float distToColliderLeft;
+    private float distToColliderRight;
+    private int interactionLayerMask;
+    RaycastHit2D hitLeft;
+    RaycastHit2D hitRight;
     
 
     // Start is called before the first frame update
     void Start()
     {
         playerRb = gameObject.GetComponent<Rigidbody2D>();
+
+        // initialize raycast variables
+        distToColliderLeft = Mathf.Infinity;
+        distToColliderRight = Mathf.Infinity;
+
         // testing stuff
         characterSlots[0] = new InitialController(gameObject);
         characterSlots[0].OnSwitch(gameObject);
         characterSlots[1] = new VillagerController(gameObject);
+        
+
 
     }
 
@@ -31,6 +47,10 @@ public class PlayerManager : MonoBehaviour
 
     private void FixedUpdate() {
         characterSlots[currCharacter].FixedUpdate();
+
+        // raycast for interactions
+        FindClosestInteraction();
+        
     }
 
 
@@ -89,5 +109,39 @@ public class PlayerManager : MonoBehaviour
 
     public Vector2 GetLocalScale(){
         return gameObject.transform.localScale;
+    }
+
+    private void FindClosestInteraction(){
+        // change layerMask as necessary TODO
+        interactionLayerMask = 1<<10;
+        hitLeft = Physics2D.Raycast(transform.position, -Vector2.right, 2f, interactionLayerMask);
+        hitRight = Physics2D.Raycast(transform.position, Vector2.right, 2f, interactionLayerMask);
+
+        // check left
+        if (hitLeft.collider != null) {
+            distToColliderLeft = Mathf.Abs(hitLeft.centroid.x - transform.position.x); 
+        } else {
+            distToColliderLeft = Mathf.Infinity;
+        }
+        // check right
+        if (hitRight.collider != null) {
+            distToColliderRight = Mathf.Abs(hitRight.centroid.x - transform.position.x); 
+        } else {
+            distToColliderRight = Mathf.Infinity;
+        }
+        
+        if (closestInteraction != null) {
+            
+            closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(false);
+        }
+
+        if(distToColliderLeft < distToColliderRight){
+            closestInteraction = hitLeft.collider;
+            closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
+        } else {
+            closestInteraction = hitRight.collider;
+            closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
+
+        }
     }
 }
