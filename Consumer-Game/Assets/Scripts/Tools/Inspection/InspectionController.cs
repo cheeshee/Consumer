@@ -45,8 +45,14 @@ public class InspectionController : DialogueController
             playerRb.constraints = RigidbodyConstraints2D.FreezeAll;
 
             // Pass lines to be displayed
-            textDisplayCanvas.GetComponent<InspectionDisplayController>().FeedLines(textJSON["stages"][stage][(int)(currentSectionID - stage) * 10].AsArray);
+            textDisplayCanvas.GetComponent<InspectionDisplayController>().FeedLines(textJSON["stages"][stage][(int)((currentSectionID - stage) * 10)].AsArray);
             // update stage and currentConvoID TODO
+            if(textJSON["type"] == "cycle"){
+                currentSectionID += 0.1f;
+                if ((currentSectionID - stage) * 10 > textJSON["options"]){
+                    currentSectionID = 0;
+                }
+            }
             
         }
         if (textDisplayCanvas.activeSelf){            
@@ -90,6 +96,10 @@ public class InspectionController : DialogueController
         // TODO
         // these values are no longer saved here, need to make new progress files to hold
         if (textJSON["type"] == "static"){
+            stage = 0;
+            currentSectionID = 0;
+        } else if (textJSON["type"] == "cycle"){
+            // check stage and current section
             stage = 0;
             currentSectionID = 0;
         } else {

@@ -79,7 +79,7 @@ public class DialogueController : MonoBehaviour
             // Pause player controls TODO
             playerRb.constraints = RigidbodyConstraints2D.FreezeAll;
             // Pass lines to be displayed
-            textDisplayCanvas.GetComponent<DialogueDisplayController>().FeedLines(textJSON["stages"][stage][(int)(currentSectionID - stage) * 10].AsArray);
+            textDisplayCanvas.GetComponent<DialogueDisplayController>().FeedLines(textJSON["stages"][stage][(int)((currentSectionID - stage) * 10)].AsArray);
             // update stage and currentConvoID TODO
         }
         if (textDisplayCanvas.activeSelf){            

@@ -1,16 +1,25 @@
 {
-    "type":"static",
+    "type":"cycle",
+    "options": 6,
     "stages":[
         [
             [
-                ["thing","this is a thing"],
-                ["thing","maybe it does something"]
-            ]
-        ],
-        [
+                ["Local Reviews","8.5 The charred actino was superb. It was freshly caught and had a light flavour that really highlighted the -"]
+            ],
             [
-                ["thing","this is a thing"],
-                ["thing","maybe it does something"]
+                ["Local Reviews","- after paying and quickly chased me out after they recognized me. -"]
+            ],
+            [
+                ["Local Reviews","- prices were higher than last time, most likely due to the rise of monsters preying on the cattle -"]
+            ],
+            [
+                ["Local Reviews","- not let me in while in my normal work clothes. I reckon wearing my old robes would bring far more trouble than they're -"]
+            ],
+            [
+                ["Local Reviews","- gave me an extra side dish. The waiter gave me some odd glances and eventually timidly gave a gravious thanks for my past efforts. -"]
+            ],
+            [
+                ["Local Reviews","- too salty yet it still didn't cover the extremely gamey taste of the meat. Some creatures just aren't meant to -"]
             ]
         ]
     ]

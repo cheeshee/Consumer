@@ -3,14 +3,9 @@
     "stages":[
         [
             [
-                ["thing","this is a thing"],
-                ["thing","maybe it does something"]
-            ]
-        ],
-        [
-            [
-                ["thing","this is a thing"],
-                ["thing","maybe it does something"]
+                ["Elemental Complex","- naturally aligned with one of the four elements. Strongly aligned creatures tend to stay within their respective elemental domains. Birds stay in the sky, fish in the water, worms in the dirt. -"],
+                ["Elemental Complex","- Weakly aligned creatures are not disadvantaged as heavily in their unaligned elements. The same applies to the rare equally aligned. -"],
+                ["Elemental Complex","-qually aligned creatures are the strongest but the most unstable and commonly display erratic behavior. It vastly -"]
             ]
         ]
     ]
