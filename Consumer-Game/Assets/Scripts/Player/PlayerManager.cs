@@ -34,6 +34,8 @@ public class PlayerManager : MonoBehaviour
         distToColliderRight = Mathf.Infinity;
         fullFriction = Resources.Load<PhysicsMaterial2D>("PhysicsMaterial/" + "FullFrictionMaterial");
         noFriction = Resources.Load<PhysicsMaterial2D>("PhysicsMaterial/" + "NoFrictionMaterial");
+        Debug.Assert(fullFriction != null);
+        Debug.Assert(noFriction != null);
 
 
         // testing stuff
