@@ -18,6 +18,8 @@ public class PlayerManager : MonoBehaviour
 
     private PhysicsMaterial2D fullFriction;
     private PhysicsMaterial2D noFriction;
+
+    [SerializeField] LayerMask collisionLayerMask;
     RaycastHit2D hitLeft;
     RaycastHit2D hitRight;
     
@@ -140,7 +142,7 @@ public class PlayerManager : MonoBehaviour
             closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(false);
         }
 
-        if (distToColliderLeft != Mathf.Infinity || distToColliderRight != Mathf.Infinity) {
+        if (hitRight.collider != null || hitLeft.collider != null) {
             if(distToColliderLeft < distToColliderRight){
                 closestInteraction = hitLeft.collider;
                 closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
@@ -162,4 +164,9 @@ public class PlayerManager : MonoBehaviour
             return noFriction;
         }
     }
+
+    public LayerMask GetPlayerLayerMask (){
+        return collisionLayerMask;
+    }
+
 }

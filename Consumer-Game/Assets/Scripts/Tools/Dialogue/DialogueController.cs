@@ -77,16 +77,16 @@ public class DialogueController : MonoBehaviour
             inInteraction = true;            
             textDisplayCanvas.SetActive(true);
             // Pause player controls TODO
-            playerRb.bodyType = RigidbodyType2D.Static;
+            playerRb.constraints = RigidbodyConstraints2D.FreezeAll;
             // Pass lines to be displayed
             textDisplayCanvas.GetComponent<DialogueDisplayController>().FeedLines(textJSON["stages"][stage][(int)(currentSectionID - stage) * 10].AsArray);
             // update stage and currentConvoID TODO
         }
         if (textDisplayCanvas.activeSelf){            
-            playerRb.bodyType = RigidbodyType2D.Static;
+            playerRb.constraints = RigidbodyConstraints2D.FreezeAll;
             indicator.SetActive(false);
         } else {
-            playerRb.bodyType = RigidbodyType2D.Dynamic;
+            playerRb.constraints = RigidbodyConstraints2D.FreezeRotation;
             indicator.SetActive(true);
         }
     }
