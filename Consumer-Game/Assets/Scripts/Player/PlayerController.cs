@@ -84,12 +84,13 @@ public class PlayerController
         contactFilter.useLayerMask = true;
         //change everything about the scene componenets
         //rigidbody
-        playerLayerMask = Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("Player"));
+        
         charRb = player.GetComponent<Rigidbody2D>();
         charBoxCol = player.GetComponent<CapsuleCollider2D>();
         playerManagerComp = player.GetComponent<PlayerManager>();
         colliderSize = charBoxCol.size;
         playerScale = playerManagerComp.GetLocalScale();
+        playerLayerMask = playerManagerComp.GetPlayerLayerMask();
         //charRb.bodyType = RigidbodyType2D.Dynamic;
         //sprite
         //animator

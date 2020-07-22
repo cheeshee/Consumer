@@ -18,6 +18,8 @@ public class PlayerManager : MonoBehaviour
 
     private PhysicsMaterial2D fullFriction;
     private PhysicsMaterial2D noFriction;
+
+    [SerializeField] LayerMask collisionLayerMask;
     RaycastHit2D hitLeft;
     RaycastHit2D hitRight;
     
@@ -162,4 +164,9 @@ public class PlayerManager : MonoBehaviour
             return noFriction;
         }
     }
+
+    public LayerMask GetPlayerLayerMask (){
+        return collisionLayerMask;
+    }
+
 }
