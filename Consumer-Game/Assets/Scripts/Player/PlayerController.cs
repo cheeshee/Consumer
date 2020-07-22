@@ -270,6 +270,7 @@ public class PlayerController
             slopeDownAngleOld = slopeDownAngle; 
             Debug.DrawRay(hit.point, slopePerpendicularVector, Color.blue);
             Debug.DrawRay(hit.point, hit.normal, Color.green);
+           // Debug.Log(LayerMask.LayerToName(hit.collider.gameObject.layer));
         }
 
         if (slopeDownAngle > maxSlopeAngle || slopeSideAngle > maxSlopeAngle)
