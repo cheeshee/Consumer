@@ -52,6 +52,7 @@ public class NpcAi : MonoBehaviour
             return;
         if(currentWaypoint >= path.vectorPath.Count){
             reachedEndOfPath = true;
+            Debug.Log("reached end of path");
             return;
         } else {
             reachedEndOfPath = false;
