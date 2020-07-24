@@ -10,10 +10,10 @@ public class PacingNpcAi : NpcAi
     // AI path finding variables
     // public Transform target;
     protected Vector2 targetPosition;
-    // [DraggablePoint]
-    protected Vector2 FirstTargetPosition;
-    // [DraggablePoint]
-    protected Vector2 secondTargetPosition;
+    [DraggablePoint]
+    public Vector2 FirstTargetPosition;
+    [DraggablePoint]
+    public Vector2 secondTargetPosition;
     protected int currentTarget;
 
     [SerializeField]
