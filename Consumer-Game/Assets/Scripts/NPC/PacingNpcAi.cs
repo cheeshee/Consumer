@@ -76,10 +76,9 @@ public class PacingNpcAi : NpcAi
         } else {
             ReactToPlayer();
         }
-
     }
 
-    protected void WalkPath(){
+    protected virtual void WalkPath(){
         if(path == null)
             return;
         if(currentWaypoint >= path.vectorPath.Count){

@@ -171,4 +171,8 @@ public class PlayerManager : MonoBehaviour
         return collisionLayerMask;
     }
 
+    public int GetCharType(){
+        return characterSlots[currCharacter].GetCharType();
+    }
+
 }
