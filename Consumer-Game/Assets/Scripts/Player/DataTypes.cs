@@ -22,4 +22,4 @@ public struct InputProperties
 }
 
 // UPDATE EVERYTIME THE LAYERS ARE CHANGED
-public enum Layers {Default, TransparentFX, Ignore_Raycast, NULL3, Water, UI, NULL6, NULL7, Ground, Player}
+public enum Layers {Default, TransparentFX, Ignore_Raycast, NULL3, Water, UI, NULL6, NULL7, Ground, Player, Interaction, Npc}

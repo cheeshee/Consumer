@@ -56,8 +56,7 @@ public class PacingNpcAi : NpcAi
                 currentTarget = 1;
                 targetPosition = FirstTargetPosition;
             }
-            Debug.Log(currentTarget);
-            seeker.StartPath(rb.position, targetPosition, OnPathComplete);
+            seeker.StartPath(npcRb.position, targetPosition, OnPathComplete);
         }
     }
 
@@ -72,26 +71,35 @@ public class PacingNpcAi : NpcAi
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+        if(onPath){
+            WalkPath();
+        } else {
+            ReactToPlayer();
+        }
+
+    }
+
+    protected void WalkPath(){
         if(path == null)
             return;
         if(currentWaypoint >= path.vectorPath.Count){
             reachedEndOfPath = true;
             Debug.Log("reached end of path");
-            rb.velocity = new Vector2(0,0);
+            npcRb.velocity = new Vector2(0,0);
             return;
         } else {
             reachedEndOfPath = false;
         }
 
-        direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
+        direction = ((Vector2)path.vectorPath[currentWaypoint] - npcRb.position).normalized;
         velocityX = direction.x * speed * Time.deltaTime;
-        rb.velocity = new Vector2(velocityX, rb.velocity.y);
+        npcRb.velocity = new Vector2(velocityX, npcRb.velocity.y);
 
-        distToWaypoint = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
+        distToWaypoint = Vector2.Distance(npcRb.position, path.vectorPath[currentWaypoint]);
 
         if(distToWaypoint < nextWaypointDistance){
             currentWaypoint++;
         }
-
     }
+
 }
