@@ -5,7 +5,7 @@ using UnityEngine;
 public struct PlayerProperties 
 {
     public enum Size { SMALL, NORMAL, LARGE}
-    public enum CharacterType {CHILD, VILLAGER, ANIMAL, MONSTER, BOSS_MONSTER}
+    public enum CharacterType {VILLAGER, CHILD, ANIMAL, MONSTER, BOSS_MONSTER}
 }
 
 public struct InputProperties
@@ -22,4 +22,4 @@ public struct InputProperties
 }
 
 // UPDATE EVERYTIME THE LAYERS ARE CHANGED
-public enum Layers {Default, TransparentFX, Ignore_Raycast, NULL3, Water, UI, NULL6, NULL7, Ground, Player, Interaction, NpcInteraction, NpcBody}
+public enum Layers {Default, TransparentFX, Ignore_Raycast, NULL3, Water, UI, NULL6, NULL7, Ground, Player}
