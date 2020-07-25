@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ForestHerbivoreAi : PacingNpcAi
+public class ForestSmallOneAi : PacingNpcAi
 {
     [SerializeField]
     private float safeDistance; // distance that herbivore goes to before returning to path
-    private float restTime; // time to wait at safe distance before resuming path
-    private float timeDetected;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -15,9 +13,8 @@ public class ForestHerbivoreAi : PacingNpcAi
         base.Start();
         // THESE ARE CUSTOM
         charType = (int)PlayerProperties.CharacterType.ANIMAL;
-        speed = 70f;
+        speed = 100f;
         safeDistance = 5f; // must be larger than detection on herbivore
-        restTime = 3f; // time should be longer than needed to walk to safe distance
         // TODO: Health and other variables
     }
 
@@ -32,7 +29,6 @@ public class ForestHerbivoreAi : PacingNpcAi
         // leave regardless, spooked
         reachedEndOfPath = true;
         onPath = false;
-        timeDetected = Time.time;
     }
 
     protected override void ReactToPlayer(){
@@ -42,10 +38,10 @@ public class ForestHerbivoreAi : PacingNpcAi
     }
 
     protected override void WalkPath(){
-        if ( Vector2.Distance(npcRb.position, playerScript.GetPosition())> safeDistance && Time.time - timeDetected > restTime){
+        if ( Vector2.Distance(npcRb.position, playerScript.GetPosition())> safeDistance){
             base.WalkPath();            
-        } else{
-            // npcRb.velocity = new Vector2(0f, npcRb.velocity.y);
+        } else {
+            npcRb.velocity = new Vector2(0f, npcRb.velocity.y);
         }// else rest
     }
 }

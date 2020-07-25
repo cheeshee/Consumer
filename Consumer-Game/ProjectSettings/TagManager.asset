@@ -18,8 +18,8 @@ TagManager:
   - Ground
   - Player
   - Interaction
-  - Npc
-  - 
+  - NpcDetection
+  - NpcBody
   - 
   - 
   - 
