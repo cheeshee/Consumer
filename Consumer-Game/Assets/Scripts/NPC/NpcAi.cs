@@ -49,7 +49,7 @@ public class NpcAi : MonoBehaviour
         // decide how to treat player
     }
 
-    public virtual void ReturnToPath(){
+    public virtual void PlayerNoLongerDetected(){
         // player is out of range
         onPath = true;
     }
