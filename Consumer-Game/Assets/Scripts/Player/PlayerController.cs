@@ -305,8 +305,4 @@ public class PlayerController
         return new Vector2(vector.y, -vector.x);
     }
 
-    public int GetCharType(){
-        return charType;
-    }
-
 }
