@@ -14,7 +14,7 @@ public class ForestSmallOneAi : PacingNpcAi
         // THESE ARE CUSTOM
         charType = (int)PlayerProperties.CharacterType.ANIMAL;
         speed = 100f;
-        safeDistance = 5f; // must be larger than detection on herbivore
+        safeDistance = 3f; // must be larger than detection on herbivore
         // TODO: Health and other variables
     }
 
