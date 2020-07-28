@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 
-public class NpcAi : MonoBehaviour
+public class NpcAi : MonoBehaviour, HealthInterface
 {
     // TODO: add variables for health and attack damage, etc.
     
@@ -57,4 +57,27 @@ public class NpcAi : MonoBehaviour
     protected virtual void ReactToPlayer(){
         // what happens if npc reacts to player
     }
+
+
+
+
+
+    //Heatlh
+    
+    [HideInInspector] public float health { get; set; }
+    public float maxHealth  { get; set; }
+    public void InitializeHealth()
+    {
+        
+        maxHealth = 100;
+        health = maxHealth;
+    }
+
+    public void ApplyDamage(float points)
+    {
+        health = Mathf.Clamp(health - points, 0, maxHealth);
+    }
+
+
+
 }
