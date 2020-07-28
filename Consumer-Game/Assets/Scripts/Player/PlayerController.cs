@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController
+public class PlayerController: HealthInterface
 {
     protected Rigidbody2D charRb;
     protected CapsuleCollider2D charBoxCol;
     protected ContactFilter2D contactFilter;
-    protected float health = 100;
+
     
     // variables for checking how environment interacts with player
     protected int charSize;
@@ -74,6 +74,21 @@ public class PlayerController
     protected float jumpingFloatModifier = 0.5f;
     protected float initialGravityModifier = 1f;
 
+    //Health
+    [HideInInspector] public float health { get; set; }
+    public float maxHealth  { get; set; }
+    public void InitializeHealth()
+    {
+        
+        maxHealth = 100;
+        health = maxHealth;
+    }
+
+    public void ApplyDamage(float points)
+    {
+        health = Mathf.Clamp(health - points, 0, maxHealth);
+    }
+
     // When player manager switches to using this controller
     public virtual void OnSwitch(GameObject player)
     {
@@ -95,6 +110,7 @@ public class PlayerController
         //sprite
         //animator
         //hitbox
+        InitializeHealth();
     }
 
 
