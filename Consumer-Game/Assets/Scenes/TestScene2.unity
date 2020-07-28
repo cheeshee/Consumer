@@ -132,6 +132,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Forest Carnivore
       objectReference: {fileID: 0}
+    - target: {fileID: 6625100483662761084, guid: ce7fb46fd04d5c74eb85af3c83915178,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6625100483662761087, guid: ce7fb46fd04d5c74eb85af3c83915178,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -984,6 +989,95 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5df985049d856954d8c5ffb15c89cbb4, type: 3}
+--- !u!1001 &1109932098
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1989111887474554413, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_Name
+      value: Forest Herbivore (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7079294417554230988, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: FirstTargetPosition.x
+      value: -3.8835936
+      objectReference: {fileID: 0}
+    - target: {fileID: 7079294417554230988, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: FirstTargetPosition.y
+      value: -2.9954302
+      objectReference: {fileID: 0}
+    - target: {fileID: 7079294417554230988, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: secondTargetPosition.x
+      value: 3.0003202
+      objectReference: {fileID: 0}
+    - target: {fileID: 7079294417554230988, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: secondTargetPosition.y
+      value: -1.4568024
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 343d641db150ca542bc86190b905a886, type: 3}
 --- !u!1001 &1517053879
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -995,6 +1089,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Forest Small One
+      objectReference: {fileID: 0}
+    - target: {fileID: 260915522023499530, guid: 4769b41ee3c29df41abeeb5d348ddbfa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 260915522023499529, guid: 4769b41ee3c29df41abeeb5d348ddbfa,
         type: 3}
