@@ -11,7 +11,7 @@ public class PlayerManager : MonoBehaviour
 
     // checking interactions for raycast
     private Collider2D closestInteraction;
-    private Collider2D currClosest;
+    private float closestDist;
     private float distToColliderLeft;
     private float distToColliderRight;
     private int interactionLayerMask;
@@ -43,6 +43,7 @@ public class PlayerManager : MonoBehaviour
         characterSlots[0].OnSwitch(gameObject);
         characterSlots[1] = new VillagerController(gameObject);
         
+        closestDist = Mathf.Infinity;
 
 
     }
@@ -61,7 +62,7 @@ public class PlayerManager : MonoBehaviour
         characterSlots[currCharacter].FixedUpdate();
 
         // raycast for interactions
-        FindClosestInteraction();
+        // FindClosestInteraction();
         
     }
 
@@ -139,43 +140,6 @@ public class PlayerManager : MonoBehaviour
         return gameObject.transform.localScale;
     }
 
-    private void FindClosestInteraction(){
-        // change layerMask as necessary TODO
-        interactionLayerMask = 1<<10;
-        hitLeft = Physics2D.Raycast(transform.position, -Vector2.right, 2f, interactionLayerMask);
-        hitRight = Physics2D.Raycast(transform.position, Vector2.right, 2f, interactionLayerMask);
-
-        // check left
-        if (hitLeft.collider != null) {
-            distToColliderLeft = Mathf.Abs(hitLeft.centroid.x - transform.position.x); 
-        } else {
-            distToColliderLeft = Mathf.Infinity;
-        }
-        // check right
-        if (hitRight.collider != null) {
-            distToColliderRight = Mathf.Abs(hitRight.centroid.x - transform.position.x); 
-        } else {
-            distToColliderRight = Mathf.Infinity;
-        }
-        
-        if (closestInteraction != null) {
-            
-            closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(false);
-        }
-
-        if (hitRight.collider != null || hitLeft.collider != null) {
-            if(distToColliderLeft < distToColliderRight){
-                closestInteraction = hitLeft.collider;
-                closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
-            } else {
-                closestInteraction = hitRight.collider;
-                closestInteraction.gameObject.GetComponent<DialogueController>().setClosest(true);
-
-            }
-        }
-    }
-
-
     public PhysicsMaterial2D GetFriction (bool friction){
         if (friction){
             return fullFriction;
@@ -200,6 +164,26 @@ public class PlayerManager : MonoBehaviour
         }
         else{
             transform.localScale = new Vector3(-1f, 1f, 1f);
+
+    public bool CheckClosestInteraction(Collider2D range){
+        if (closestInteraction != range){
+            float distTo = Mathf.Abs(range.transform.position.x - transform.position.x);
+            if(distTo < closestDist){
+                closestDist = distTo;
+                closestInteraction = range;
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    public void LeaveClosestInteraction(Collider2D range){
+        if(closestInteraction == range){
+            closestDist = Mathf.Infinity;
+            closestInteraction = null;
         }
     }
 
