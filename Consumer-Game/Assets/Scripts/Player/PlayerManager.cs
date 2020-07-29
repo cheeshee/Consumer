@@ -165,6 +165,9 @@ public class PlayerManager : MonoBehaviour
         else{
             transform.localScale = new Vector3(-1f, 1f, 1f);
 
+        }
+    }
+
     public bool CheckClosestInteraction(Collider2D range){
         if (closestInteraction != range){
             float distTo = Mathf.Abs(range.transform.position.x - transform.position.x);
