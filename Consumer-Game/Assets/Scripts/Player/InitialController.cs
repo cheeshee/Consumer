@@ -52,11 +52,11 @@ public class InitialController : PlayerController
     //     base.Jump();
     // }
 
-    // public override void Attack()
-    // {
-    //     base.Attack();
+    public override void Attack()
+    {
+        base.Attack();
 
-    // }
+    }
 
 
     // Update is called once per frame

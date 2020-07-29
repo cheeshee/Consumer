@@ -14,6 +14,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
     protected Rigidbody2D npcRb;
 
     protected bool onPath;
+    protected bool isDead;
     protected SpriteRenderer npcGraphics;
     protected PlayerManager playerScript;
 
@@ -37,7 +38,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
     }
 
 
-    protected void UpdateGraphics(){        
+    protected virtual void UpdateGraphics(){        
         if (npcRb.velocity.x >= 0.01f){
             npcGraphics.flipX = false;
         } else if (npcRb.velocity.x < -0.01f){
@@ -66,18 +67,30 @@ public class NpcAi : MonoBehaviour, HealthInterface
     
     [HideInInspector] public float health { get; set; }
     public float maxHealth  { get; set; }
-    public void InitializeHealth()
+    public virtual void InitializeHealth()
     {
         
         maxHealth = 100;
         health = maxHealth;
     }
 
-    public void ApplyDamage(float points)
+    public virtual void ApplyDamage(float points)
     {
         health = Mathf.Clamp(health - points, 0, maxHealth);
+        if (health <= 0){
+            onDeath();
+        }
+
     }
 
+    public virtual void onDeath(){
+        isDead = true;
+    }
+
+    public virtual void onConsume(){
+        //Delete Body
+        //Place correct 
+    }
 
 
 }

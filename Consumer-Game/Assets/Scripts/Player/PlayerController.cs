@@ -77,14 +77,14 @@ public class PlayerController: HealthInterface
     //Health
     [HideInInspector] public float health { get; set; }
     public float maxHealth  { get; set; }
-    public void InitializeHealth()
+    public virtual void InitializeHealth()
     {
         
         maxHealth = 100;
         health = maxHealth;
     }
 
-    public void ApplyDamage(float points)
+    public virtual void ApplyDamage(float points)
     {
         health = Mathf.Clamp(health - points, 0, maxHealth);
     }
@@ -124,6 +124,7 @@ public class PlayerController: HealthInterface
             {
                 movingRight = true;
                 movingLeft = false;
+                playerManagerComp.FlipHorizontal(true);
                     
             }
             //Left Direction
@@ -131,6 +132,7 @@ public class PlayerController: HealthInterface
             {
                 movingRight = false;
                 movingLeft = true;
+                playerManagerComp.FlipHorizontal(false);
             }
             else {
                 movingLeft = false;
@@ -168,7 +170,7 @@ public class PlayerController: HealthInterface
 
     public virtual void Attack()
     {
-        Debug.Log("attacking");
+        //Debug.Log("attacking");
     }
     
     // Update is called once per frame
@@ -321,7 +323,7 @@ public class PlayerController: HealthInterface
         return new Vector2(vector.y, -vector.x);
     }
 
-    public int GetCharType(){
+    public virtual int GetCharType(){
         return charType;
     }
 
