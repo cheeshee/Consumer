@@ -53,6 +53,8 @@ public class PlayerManager : MonoBehaviour
     {
         DetectMove();
         DetectJump();
+        DetectAttack();
+        DetectConsume();
         DetectShapeShift();
     }
 
@@ -77,6 +79,23 @@ public class PlayerManager : MonoBehaviour
     {
 
         characterSlots[currCharacter].Move();
+
+    }
+
+    
+    private void DetectAttack()
+    {
+
+        characterSlots[currCharacter].Attack();
+
+    }
+
+
+    private void DetectConsume()
+    {
+
+       //TODO
+       //Need another closest interaction
 
     }
 
@@ -139,6 +158,15 @@ public class PlayerManager : MonoBehaviour
         return characterSlots[currCharacter].GetCharType();
     }
 
+    public void FlipHorizontal(bool facingRight){
+        if (facingRight){
+            transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+        else{
+            transform.localScale = new Vector3(-1f, 1f, 1f);
+
+        }
+    }
 
     public bool CheckClosestInteraction(Collider2D range){
         if (closestInteraction != range){

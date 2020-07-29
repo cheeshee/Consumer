@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 
-public class NpcAi : MonoBehaviour
+public class NpcAi : MonoBehaviour, HealthInterface
 {
     // TODO: add variables for health and attack damage, etc.
     
@@ -14,6 +14,7 @@ public class NpcAi : MonoBehaviour
     protected Rigidbody2D npcRb;
 
     protected bool onPath;
+    protected bool isDead;
     protected SpriteRenderer npcGraphics;
     protected PlayerManager playerScript;
 
@@ -37,7 +38,7 @@ public class NpcAi : MonoBehaviour
     }
 
 
-    protected void UpdateGraphics(){        
+    protected virtual void UpdateGraphics(){        
         if (npcRb.velocity.x >= 0.01f){
             npcGraphics.flipX = false;
         } else if (npcRb.velocity.x < -0.01f){
@@ -57,4 +58,39 @@ public class NpcAi : MonoBehaviour
     protected virtual void ReactToPlayer(){
         // what happens if npc reacts to player
     }
+
+
+
+
+
+    //Heatlh
+    
+    [HideInInspector] public float health { get; set; }
+    public float maxHealth  { get; set; }
+    public virtual void InitializeHealth()
+    {
+        
+        maxHealth = 100;
+        health = maxHealth;
+    }
+
+    public virtual void ApplyDamage(float points)
+    {
+        health = Mathf.Clamp(health - points, 0, maxHealth);
+        if (health <= 0){
+            onDeath();
+        }
+
+    }
+
+    public virtual void onDeath(){
+        isDead = true;
+    }
+
+    public virtual void onConsume(){
+        //Delete Body
+        //Place correct 
+    }
+
+
 }
