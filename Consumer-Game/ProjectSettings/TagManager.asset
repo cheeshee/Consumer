@@ -18,8 +18,8 @@ TagManager:
   - Ground
   - Player
   - Interaction
-  - 
-  - 
+  - NPCInteraction
+  - NPCBody
   - 
   - 
   - 
@@ -42,6 +42,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: NPCs
+    uniqueID: 3985515629
     locked: 0
   - name: Indicators
     uniqueID: 2557120921

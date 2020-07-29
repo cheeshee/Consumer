@@ -21,10 +21,9 @@ public class InspectionController : DialogueController
         indicatorAnimator = indicator.GetComponent<Animator>();
         indicator.SetActive(false);
         textDisplayCanvas = GameObject.FindGameObjectWithTag("InspectionCanvas");
-        // inspectionCanvas.SetActive(false);
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
         inRange = false;
         inInteraction = false;   
-        closestToPlayer = false;  
 
         // TODO
         // grab these values whereever they're saved
