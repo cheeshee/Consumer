@@ -14,7 +14,9 @@ public class DialogueController : MonoBehaviour
     protected Rigidbody2D playerRb;
     protected GameObject textDisplayCanvas;
 
-    protected bool closestToPlayer;
+    // protected bool closestToPlayer;
+    protected PlayerManager playerScript;
+
 
     [SerializeField]
     protected TextAsset textFile;
@@ -33,10 +35,9 @@ public class DialogueController : MonoBehaviour
         indicatorAnimator = indicator.GetComponent<Animator>();
         indicator.SetActive(false);
         textDisplayCanvas = GameObject.FindGameObjectWithTag("DialogueCanvas");
-        // dialogueCanvas.SetActive(false);
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
         inRange = false;
         inInteraction = false; 
-        closestToPlayer = false;  
 
         // TODO
         // grab these values whereever they're saved
@@ -51,8 +52,11 @@ public class DialogueController : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if(inRange && closestToPlayer){
+        if(inRange && playerScript.CheckClosestInteraction(playerDetectionCollider)){//closestToPlayer){
+            indicatorAnimator.SetBool("inRange", true);
             EnterDialogue();
+        } else {
+            indicatorAnimator.SetBool("inRange", false);
         }
     }
 
@@ -68,6 +72,7 @@ public class DialogueController : MonoBehaviour
         if (other.gameObject.layer == (int) Layers.Player){
             inRange = false;
             indicator.SetActive(false);
+            playerScript.LeaveClosestInteraction(playerDetectionCollider);
         }
     }
 
@@ -124,11 +129,6 @@ public class DialogueController : MonoBehaviour
         // TODO
         // stage = textJSON["currentStage"];
         // currentConvoID = textJSON["currentConvoID"];    
-    }
-
-    public void setClosest(bool closest){
-        closestToPlayer = closest;
-        indicatorAnimator.SetBool("inRange", closest);
     }
 
 }
