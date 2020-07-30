@@ -20,9 +20,10 @@ public class PlayerManager : MonoBehaviour
     private PhysicsMaterial2D noFriction;
 
     [SerializeField] LayerMask collisionLayerMask;
-    RaycastHit2D hitLeft;
-    RaycastHit2D hitRight;
     
+    // detect consume variables
+    protected bool consumable;
+    protected float startConsume;
 
     // Start is called before the first frame update
     void Start()
@@ -92,10 +93,23 @@ public class PlayerManager : MonoBehaviour
 
 
     private void DetectConsume()
-    {
+    {   
 
-       //TODO
-       //Need another closest interaction
+        //TODO
+        //Need another closest interaction
+        if (consumable){
+            if (Input.GetButtonDown("Interact")){
+                startConsume = Time.time;
+            } else if (Input.GetButton("Interact") && (Time.time - startConsume) > 1f){
+                // start consume
+                //Place correct 
+                SaveController(closestInteraction.gameObject);
+                //Delete Body
+                closestInteraction.gameObject.SetActive(false);
+                LeaveClosestInteraction(closestInteraction);
+                consumable = false;
+            }
+        }
 
     }
 
@@ -130,6 +144,10 @@ public class PlayerManager : MonoBehaviour
             currCharacter = (int)InputProperties.Slots.EIGHTH;
         } 
         characterSlots[currCharacter].OnSwitch(gameObject);
+    }
+
+    private void SaveController(GameObject consumedNPC){
+        Debug.Log("saving the new controller somehow");
     }
 
     public Vector2 GetPosition(){
@@ -190,4 +208,9 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void CanConsume(bool consume){
+        consumable = consume;
+    }
+
+    
 }

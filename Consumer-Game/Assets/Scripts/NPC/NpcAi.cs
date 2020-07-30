@@ -12,19 +12,35 @@ public class NpcAi : MonoBehaviour, HealthInterface
     protected int charType;
 
     protected Rigidbody2D npcRb;
+    protected Collider2D npcCollider;
+    // indicate consumable
+    protected GameObject indicator;
+    protected Animator indicatorAnimator;
 
     protected bool onPath;
+    [SerializeField]
     protected bool isDead;
+
     protected SpriteRenderer npcGraphics;
     protected PlayerManager playerScript;
+
+    protected PlayerController npcController;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         npcRb = GetComponent<Rigidbody2D>();
+        npcCollider = GetComponent<Collider2D>();
         npcGraphics = GetComponent<SpriteRenderer>();
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
+        // indicate consumable
+        indicator = transform.GetChild(1).gameObject;
+        indicatorAnimator = indicator.GetComponent<Animator>();
+        indicator.SetActive(false);
+
         onPath = true;
+        isDead = false;
+        // TODO: instantiate an appropriate npcController 
     }
 
     protected virtual void Update(){
@@ -35,6 +51,9 @@ public class NpcAi : MonoBehaviour, HealthInterface
     protected virtual void FixedUpdate()
     {
         UpdateGraphics();
+        DetectConsumable();
+        // test purpose
+        onDeath();
     }
 
 
@@ -43,6 +62,16 @@ public class NpcAi : MonoBehaviour, HealthInterface
             npcGraphics.flipX = false;
         } else if (npcRb.velocity.x < -0.01f){
             npcGraphics.flipX = true;
+        }
+    }
+
+    protected virtual void DetectConsumable(){
+        if (isDead && playerScript.CheckClosestInteraction(npcCollider)){
+            playerScript.CanConsume(true);
+            indicatorAnimator.SetBool("inRange", true);
+        } else {
+            playerScript.CanConsume(false);
+            indicatorAnimator.SetBool("inRange", false);
         }
     }
 
@@ -58,7 +87,6 @@ public class NpcAi : MonoBehaviour, HealthInterface
     protected virtual void ReactToPlayer(){
         // what happens if npc reacts to player
     }
-
 
 
 
@@ -85,12 +113,38 @@ public class NpcAi : MonoBehaviour, HealthInterface
 
     public virtual void onDeath(){
         isDead = true;
+        // set interaction object to inactive
+        transform.GetChild(0).gameObject.SetActive(false);
+        npcRb.constraints = RigidbodyConstraints2D.FreezeAll;
+        npcCollider.isTrigger = true;
+        gameObject.layer = (int) Layers.Interaction;
     }
 
-    public virtual void onConsume(){
-        //Delete Body
-        //Place correct 
+    protected virtual void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.layer == (int) Layers.Player){
+            indicator.SetActive(true);
+        }
     }
+
+    protected virtual void OnTriggerExit2D(Collider2D other) {
+        if (other.gameObject.layer == (int) Layers.Player){
+            indicator.SetActive(false);
+            playerScript.LeaveClosestInteraction(npcCollider);
+        }
+    }
+
+    // called when player presses key in PlayerManager and confirms consumption
+    // public virtual void onConsume(){
+    //     // if (Input.GetButtonDown("Interact")){
+    //     //     startConsume = Time.time;
+    //     // } else if (Input.GetButton("Interact") && (Time.time - startConsume) > 1f){
+    //     //     // start consume
+    //     //     //Delete Body
+    //         gameObject.SetActive(false);
+    //     //     //Place correct 
+    //     //     playerScript.SaveController(gameObject);
+    //     // }
+    // }
 
 
 }
