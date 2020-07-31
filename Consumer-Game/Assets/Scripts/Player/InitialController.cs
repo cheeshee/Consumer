@@ -5,7 +5,7 @@ using UnityEngine;
 public class InitialController : PlayerController
 {
     // constructor
-    public InitialController(GameObject player) 
+    public InitialController(GameObject sourceCharacter) 
     {
         //set all the variables for this controller
         health = 100;
@@ -31,8 +31,14 @@ public class InitialController : PlayerController
         // canSwim
         // canClimb
 
-        // charSprite
+        // charSprite  
+        storedSprite = sourceCharacter.GetComponent<SpriteRenderer>().sprite;
         // charAnimator
+        storedAnimator = sourceCharacter.GetComponent<Animator>();
+        //rigidbody
+        storedRb = sourceCharacter.GetComponent<Rigidbody2D>();
+        //collider
+        storedCollider = sourceCharacter.GetComponent<CapsuleCollider2D>();
     }
 
     // When player manager switches to using this controller
