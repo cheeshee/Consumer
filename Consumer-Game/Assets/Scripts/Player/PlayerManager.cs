@@ -250,6 +250,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void CanConsume(bool consume){
+        // Debug.Log("consumable:" + consume);
         consumable = consume;
     }
 

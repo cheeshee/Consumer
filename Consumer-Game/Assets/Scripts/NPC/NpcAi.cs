@@ -71,7 +71,6 @@ public class NpcAi : MonoBehaviour, HealthInterface
             playerScript.CanConsume(true);
             indicatorAnimator.SetBool("inRange", true);
         } else {
-            playerScript.CanConsume(false);
             indicatorAnimator.SetBool("inRange", false);
         }
     }
@@ -131,6 +130,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
         if (other.gameObject.layer == (int) Layers.Player){
             indicator.SetActive(false);
             playerScript.LeaveClosestInteraction(npcCollider);
+            playerScript.CanConsume(false);
         }
     }
 
