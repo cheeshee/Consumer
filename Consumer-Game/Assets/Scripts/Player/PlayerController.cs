@@ -79,8 +79,8 @@ public class PlayerController: HealthInterface
 
 
     //Health
-    [HideInInspector] public float health { get; set; }
-    public float maxHealth  { get; set; }
+    [HideInInspector] public int health { get; set; }
+    public int maxHealth  { get; set; }
     public virtual void InitializeHealth()
     {
         
@@ -88,7 +88,7 @@ public class PlayerController: HealthInterface
         health = maxHealth;
     }
 
-    public virtual void ApplyDamage(float points)
+    public virtual void ApplyDamage(int points)
     {
         health = Mathf.Clamp(health - points, 0, maxHealth);
     }

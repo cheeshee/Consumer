@@ -96,9 +96,7 @@ public class PlayerManager : MonoBehaviour
     
     private void DetectAttack()
     {
-
         characterSlots[currCharacter].Attack();
-
     }
 
 
@@ -191,6 +189,10 @@ public class PlayerManager : MonoBehaviour
 
     public Vector2 GetPosition(){
         return gameObject.transform.position;
+    }
+
+    public GameObject GetGameObject(){
+        return gameObject;
     }
 
     public Vector2 GetLocalScale(){
