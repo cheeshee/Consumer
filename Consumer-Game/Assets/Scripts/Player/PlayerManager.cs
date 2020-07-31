@@ -55,6 +55,8 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log("current Slot:" + currCharacter);
+        
         if (inSlotSelection){
             SaveController();
         } else {
@@ -120,8 +122,16 @@ public class PlayerManager : MonoBehaviour
     private void DetectShapeShift()
     {
         int slot = GetSlotSelected();
+        int prevCharacter = currCharacter;
+
         currCharacter = slot < 0? currCharacter : slot;
-        characterSlots[currCharacter].OnSwitch(gameObject);
+        if (characterSlots[currCharacter] != null){
+            characterSlots[currCharacter].OnSwitch(gameObject);
+        }
+        else{
+            currCharacter = prevCharacter;
+        }
+        
     }
 
     private void SaveController(){
