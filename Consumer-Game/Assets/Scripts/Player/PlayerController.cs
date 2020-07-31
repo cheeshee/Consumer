@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerController: HealthInterface
 {
+    // referring to the instances on runtime
     protected Rigidbody2D charRb;
-    protected CapsuleCollider2D charBoxCol;
+    protected CapsuleCollider2D charCollider;
     protected ContactFilter2D contactFilter;
 
     
@@ -39,9 +40,11 @@ public class PlayerController: HealthInterface
     protected bool canSwim = false;
     protected bool canClimb = false;
 
-    // variables for display
-    protected Sprite charSprite;
-    protected Animator charAnimator;
+    // variables for display and scene
+    protected Sprite storedSprite;
+    protected Animator storedAnimator;
+    protected Rigidbody2D storedRb;
+    protected CapsuleCollider2D storedCollider;
 
     //Player Physics Variables
     protected float playerVelocityX = 0f;
@@ -74,6 +77,7 @@ public class PlayerController: HealthInterface
     protected float jumpingFloatModifier = 0.5f;
     protected float initialGravityModifier = 1f;
 
+
     //Health
     [HideInInspector] public float health { get; set; }
     public float maxHealth  { get; set; }
@@ -98,19 +102,45 @@ public class PlayerController: HealthInterface
         //use physics2D settings to determine what layers we're going to check collisions against
         contactFilter.useLayerMask = true;
         //change everything about the scene componenets
-        //rigidbody
         
         charRb = player.GetComponent<Rigidbody2D>();
-        charBoxCol = player.GetComponent<CapsuleCollider2D>();
+        charCollider = player.GetComponent<CapsuleCollider2D>();
         playerManagerComp = player.GetComponent<PlayerManager>();
-        colliderSize = charBoxCol.size;
+        colliderSize = charCollider.size;
         playerScale = playerManagerComp.GetLocalScale();
         playerLayerMask = playerManagerComp.GetPlayerLayerMask();
         //charRb.bodyType = RigidbodyType2D.Dynamic;
+
         //sprite
+        player.GetComponent<SpriteRenderer>().sprite = storedSprite;
         //animator
-        //hitbox
+        player.GetComponent<Animator>().runtimeAnimatorController = storedAnimator.runtimeAnimatorController;
+        //rigidbody
+        CopyRigidBody(charRb, storedRb);
+        //collider
+        CopyCollider(charCollider, storedCollider);
+
         InitializeHealth();
+    }
+
+    private void CopyRigidBody(Rigidbody2D copyTo, Rigidbody2D copyFrom){
+        copyTo.bodyType = copyFrom.bodyType;
+        copyTo.sharedMaterial = copyFrom.sharedMaterial;
+        copyTo.simulated = copyFrom.simulated;
+        copyTo.useAutoMass = copyFrom.useAutoMass;
+        copyTo.mass = copyFrom.mass;
+        copyTo.angularDrag = copyFrom.angularDrag;
+        copyTo.drag = copyFrom.drag;
+        copyTo.gravityScale = copyFrom.gravityScale;
+        copyTo.collisionDetectionMode = copyFrom.collisionDetectionMode;
+
+    }
+
+    private void CopyCollider(CapsuleCollider2D copyTo, CapsuleCollider2D copyFrom){
+        copyTo.sharedMaterial = copyFrom.sharedMaterial;
+        copyTo.direction = copyFrom.direction;
+        copyTo.offset = copyFrom.offset;
+        copyTo.size = copyFrom.size;
     }
 
 

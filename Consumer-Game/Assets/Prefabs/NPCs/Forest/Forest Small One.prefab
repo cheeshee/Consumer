@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 260915522023499527}
   - component: {fileID: 260915522023499525}
   - component: {fileID: 8160157527787515425}
+  - component: {fileID: 3667628925531797665}
   m_Layer: 12
   m_Name: Forest Small One
   m_TagString: Untagged
@@ -172,6 +173,25 @@ MonoBehaviour:
   safeDistance: 0
   restTime: 0
   escapeSpeedMultiplier: 0
+--- !u!95 &3667628925531797665
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260915522023499530}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &528343530415125039
 PrefabInstance:
   m_ObjectHideFlags: 0

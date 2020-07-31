@@ -41,6 +41,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
         onPath = true;
         isDead = false;
         // TODO: instantiate an appropriate npcController 
+        npcController = new VillagerController(gameObject);
     }
 
     protected virtual void Update(){
@@ -133,18 +134,15 @@ public class NpcAi : MonoBehaviour, HealthInterface
         }
     }
 
-    // called when player presses key in PlayerManager and confirms consumption
-    // public virtual void onConsume(){
-    //     // if (Input.GetButtonDown("Interact")){
-    //     //     startConsume = Time.time;
-    //     // } else if (Input.GetButton("Interact") && (Time.time - startConsume) > 1f){
-    //     //     // start consume
-    //     //     //Delete Body
-    //         gameObject.SetActive(false);
-    //     //     //Place correct 
-    //     //     playerScript.SaveController(gameObject);
-    //     // }
-    // }
-
+    // for saving into player manager
+    public PlayerController GetController(){
+        return npcController;
+    }
+    public Sprite GetSprite(){
+        return npcGraphics.sprite;
+    }
+    public Rigidbody2D GetRigidbody(){
+        return npcRb;
+    }
 
 }

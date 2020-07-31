@@ -25,6 +25,8 @@ public class PlayerManager : MonoBehaviour
     protected bool consumable;
     protected float startConsume;
 
+    protected bool inSlotSelection;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +35,7 @@ public class PlayerManager : MonoBehaviour
         // initialize raycast variables
         distToColliderLeft = Mathf.Infinity;
         distToColliderRight = Mathf.Infinity;
+
         fullFriction = Resources.Load<PhysicsMaterial2D>("PhysicsMaterial/" + "FullFrictionMaterial");
         noFriction = Resources.Load<PhysicsMaterial2D>("PhysicsMaterial/" + "NoFrictionMaterial");
         Debug.Assert(fullFriction != null);
@@ -52,11 +55,16 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DetectMove();
-        DetectJump();
-        DetectAttack();
-        DetectConsume();
-        DetectShapeShift();
+        if (inSlotSelection){
+            SaveController();
+        } else {
+            DetectMove();
+            DetectJump();
+            DetectAttack();
+            DetectConsume();
+            DetectShapeShift();
+        }
+
     }
 
     private void FixedUpdate() {
@@ -102,12 +110,8 @@ public class PlayerManager : MonoBehaviour
                 startConsume = Time.time;
             } else if (Input.GetButton("Interact") && (Time.time - startConsume) > 1f){
                 // start consume
-                //Place correct 
-                SaveController(closestInteraction.gameObject);
-                //Delete Body
-                closestInteraction.gameObject.SetActive(false);
-                LeaveClosestInteraction(closestInteraction);
-                consumable = false;
+                inSlotSelection = true;
+                Debug.Log("display some UI here");
             }
         }
 
@@ -115,39 +119,64 @@ public class PlayerManager : MonoBehaviour
 
     private void DetectShapeShift()
     {
-        if(Input.GetButtonDown(InputProperties.FIRST))
-        {
-            currCharacter = (int)InputProperties.Slots.FIRST;
-        } 
-        else if(Input.GetButtonDown(InputProperties.SECOND))
-        {
-            currCharacter = (int)InputProperties.Slots.SECOND;
-        } 
-        else if(Input.GetButtonDown(InputProperties.THIRD))
-        {
-            currCharacter = (int)InputProperties.Slots.THIRD;
-        } 
-        else if(Input.GetButtonDown(InputProperties.FOURTH))
-        {
-            currCharacter = (int)InputProperties.Slots.FOURTH;
-        } 
-        else if(Input.GetButtonDown(InputProperties.FIFTH))
-        {
-            currCharacter = (int)InputProperties.Slots.FIFTH;
-        } 
-        else if(Input.GetButtonDown(InputProperties.SIXTH))
-        {
-            currCharacter = (int)InputProperties.Slots.SIXTH;
-        } 
-        else if(Input.GetButtonDown(InputProperties.EIGHTH))
-        {
-            currCharacter = (int)InputProperties.Slots.EIGHTH;
-        } 
+        int slot = GetSlotSelected();
+        currCharacter = slot < 0? currCharacter : slot;
         characterSlots[currCharacter].OnSwitch(gameObject);
     }
 
-    private void SaveController(GameObject consumedNPC){
-        Debug.Log("saving the new controller somehow");
+    private void SaveController(){
+
+        int saveSlot = GetSlotSelected();
+        Debug.Log("choose a slot");
+        if (saveSlot >= 0){
+            Debug.Log("saving the new controller somehow");
+            Debug.Log("saveSlot = " + saveSlot);
+            NpcAi deadNPC;
+            deadNPC = closestInteraction.gameObject.GetComponent<NpcAi>();
+            characterSlots[saveSlot] = deadNPC.GetController();
+            Debug.Log("newly saved: " + characterSlots[saveSlot]);
+            //Delete Body
+            closestInteraction.gameObject.SetActive(false);
+            Debug.Log("newly saved: " + characterSlots[saveSlot]);
+            LeaveClosestInteraction(closestInteraction);
+            consumable = false;
+            inSlotSelection = false;
+        }
+
+
+    }
+
+    private int GetSlotSelected(){
+        int slot = -1;
+        if(Input.GetButtonDown(InputProperties.FIRST))
+        {
+            slot = (int)InputProperties.Slots.FIRST;
+        } 
+        else if(Input.GetButtonDown(InputProperties.SECOND))
+        {
+            slot = (int)InputProperties.Slots.SECOND;
+        } 
+        else if(Input.GetButtonDown(InputProperties.THIRD))
+        {
+            slot = (int)InputProperties.Slots.THIRD;
+        } 
+        else if(Input.GetButtonDown(InputProperties.FOURTH))
+        {
+            slot = (int)InputProperties.Slots.FOURTH;
+        } 
+        else if(Input.GetButtonDown(InputProperties.FIFTH))
+        {
+            slot = (int)InputProperties.Slots.FIFTH;
+        } 
+        else if(Input.GetButtonDown(InputProperties.SIXTH))
+        {
+            slot = (int)InputProperties.Slots.SIXTH;
+        } 
+        else if(Input.GetButtonDown(InputProperties.EIGHTH))
+        {
+            slot = (int)InputProperties.Slots.EIGHTH;
+        } 
+        return slot;
     }
 
     public Vector2 GetPosition(){
