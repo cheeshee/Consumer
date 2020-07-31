@@ -135,7 +135,7 @@ PrefabInstance:
     - target: {fileID: 6625100483662761084, guid: ce7fb46fd04d5c74eb85af3c83915178,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6625100483662761087, guid: ce7fb46fd04d5c74eb85af3c83915178,
         type: 3}
@@ -432,6 +432,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Forest Herbivore
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989111887474554413, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
         type: 3}
@@ -1004,12 +1009,12 @@ PrefabInstance:
     - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.14
+      value: -5.81
       objectReference: {fileID: 0}
     - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.9
+      value: -2.47
       objectReference: {fileID: 0}
     - target: {fileID: 1989111887474554414, guid: 343d641db150ca542bc86190b905a886,
         type: 3}
@@ -1076,6 +1081,11 @@ PrefabInstance:
       propertyPath: secondTargetPosition.y
       value: -1.4568024
       objectReference: {fileID: 0}
+    - target: {fileID: 7079294417554230988, guid: 343d641db150ca542bc86190b905a886,
+        type: 3}
+      propertyPath: isDead
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 343d641db150ca542bc86190b905a886, type: 3}
 --- !u!1001 &1517053879
@@ -1093,7 +1103,7 @@ PrefabInstance:
     - target: {fileID: 260915522023499530, guid: 4769b41ee3c29df41abeeb5d348ddbfa,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 260915522023499529, guid: 4769b41ee3c29df41abeeb5d348ddbfa,
         type: 3}

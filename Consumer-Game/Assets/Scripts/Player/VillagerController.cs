@@ -5,7 +5,7 @@ using UnityEngine;
 public class VillagerController : PlayerController
 {
     // constructor
-    public VillagerController(GameObject player) 
+    public VillagerController(GameObject sourceCharacter) 
     {
         //set all the variables for this controller
         health = 100;
@@ -32,7 +32,14 @@ public class VillagerController : PlayerController
         // canClimb
 
         // charSprite  
+        storedSprite = sourceCharacter.GetComponent<SpriteRenderer>().sprite;
         // charAnimator
+        storedAnimator = sourceCharacter.GetComponent<Animator>();
+        //rigidbody
+        storedRb = sourceCharacter.GetComponent<Rigidbody2D>();
+        //collider
+        storedCollider = sourceCharacter.GetComponent<CapsuleCollider2D>();
+
     }
 
     // When player manager switches to using this controller
