@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DialogueCanvas
   - InspectionCanvas
+  - Enemy
   layers:
   - Default
   - TransparentFX
