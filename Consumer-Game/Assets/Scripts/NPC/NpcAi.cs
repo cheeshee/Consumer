@@ -42,6 +42,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
         isDead = false;
         // TODO: instantiate an appropriate npcController 
         npcController = new VillagerController(gameObject);
+        InitializeHealth();
     }
 
     protected virtual void Update(){
@@ -105,6 +106,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
     public virtual void ApplyDamage(int points)
     {
         health = Mathf.Clamp(health - points, 0, maxHealth);
+        Debug.Log("NPC Took " + points + " damage, I have " + health + "health");
         if (health <= 0){
             onDeath();
         }
