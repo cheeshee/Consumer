@@ -29,7 +29,7 @@ public class InitialController : PlayerController
         // defense
 
         // canSwim
-        // canClimb
+        canClimb = true;
 
         // charSprite  
         storedSprite = sourceCharacter.GetComponent<SpriteRenderer>().sprite;

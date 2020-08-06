@@ -12,8 +12,6 @@ public class PlayerManager : MonoBehaviour
     // checking interactions for raycast
     private Collider2D closestInteraction;
     private float closestDist;
-    private float distToColliderLeft;
-    private float distToColliderRight;
     private int interactionLayerMask;
 
     private PhysicsMaterial2D fullFriction;
@@ -25,6 +23,11 @@ public class PlayerManager : MonoBehaviour
     protected bool consumable;
     protected float startConsume;
 
+    // detect climb variables
+    protected bool climbing;
+    protected float climbTop;
+    protected float climbBottom;
+
     protected bool inSlotSelection;
 
     // Start is called before the first frame update
@@ -32,9 +35,6 @@ public class PlayerManager : MonoBehaviour
     {
         playerRb = gameObject.GetComponent<Rigidbody2D>();
 
-        // initialize raycast variables
-        distToColliderLeft = Mathf.Infinity;
-        distToColliderRight = Mathf.Infinity;
 
         fullFriction = Resources.Load<PhysicsMaterial2D>("PhysicsMaterial/" + "FullFrictionMaterial");
         noFriction = Resources.Load<PhysicsMaterial2D>("PhysicsMaterial/" + "NoFrictionMaterial");
@@ -62,6 +62,7 @@ public class PlayerManager : MonoBehaviour
         } else {
             DetectMove();
             DetectJump();
+            DetectClimb();
             DetectAttack();
             DetectConsume();
             DetectShapeShift();
@@ -81,7 +82,9 @@ public class PlayerManager : MonoBehaviour
 
     private void DetectJump()
     {
-
+        if(Input.GetButtonDown("Jump")){
+            climbing = false;
+        }
         characterSlots[currCharacter].Jump();
 
     }
@@ -115,6 +118,12 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
+    }
+
+    private void DetectClimb(){
+        if(climbing){
+            characterSlots[currCharacter].Climb();
+        }
     }
 
     private void DetectShapeShift()
@@ -217,6 +226,18 @@ public class PlayerManager : MonoBehaviour
         return characterSlots[currCharacter].GetCharType();
     }
 
+    public Collider2D GetClosestInteraction(){
+        return closestInteraction;
+    }
+
+    public float GetClimbTop(){
+        return climbTop;
+    }
+
+    public float GetClimbBottom(){
+        return climbBottom;
+    }
+
     public void FlipHorizontal(bool facingRight){
         if (facingRight){
             transform.localScale = new Vector3(1f, 1f, 1f);
@@ -252,6 +273,13 @@ public class PlayerManager : MonoBehaviour
     public void CanConsume(bool consume){
         // Debug.Log("consumable:" + consume);
         consumable = consume;
+    }
+
+    public void Climbing(){
+        climbing = true;
+        // playerRb.constraints = RigidbodyConstraints2D.FreezePositionX;
+        climbTop = GetClosestInteraction().bounds.max.y;
+        climbBottom = GetClosestInteraction().bounds.min.y;
     }
 
     

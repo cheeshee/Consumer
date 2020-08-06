@@ -21,7 +21,7 @@ public class PlayerController: HealthInterface
     // protected float deceleration;
 
     //how close to mouse posiiton to stop moving
-    protected float xRange = 0.2f;
+    protected float mouseLeeway = 0.2f;
 
     protected float jumpMultiplier;
     // protected float jumpFallMultiplier;
@@ -76,6 +76,9 @@ public class PlayerController: HealthInterface
     protected float jumpVelocity = 4f;
     protected float jumpingFloatModifier = 0.5f;
     protected float initialGravityModifier = 1f;
+    // climbing
+    protected bool isClimbing = false;
+    protected float climbSpeed = 5f;
 
 
     //Health
@@ -150,7 +153,7 @@ public class PlayerController: HealthInterface
 
         if (Input.GetButton("Move")){
             //Right Direction
-            if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > charRb.position.x + xRange)
+            if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > charRb.position.x + mouseLeeway)
             {
                 movingRight = true;
                 movingLeft = false;
@@ -158,7 +161,7 @@ public class PlayerController: HealthInterface
                     
             }
             //Left Direction
-            else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x< charRb.position.x - xRange)
+            else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x< charRb.position.x - mouseLeeway)
             {
                 movingRight = false;
                 movingLeft = true;
@@ -179,6 +182,8 @@ public class PlayerController: HealthInterface
     public virtual void Jump()
     {
         if (Input.GetButton("Jump")){
+            isClimbing = false;
+            Physics.IgnoreLayerCollision((int)Layers.Player, (int)Layers.Ground, false);
             if(canJump){
                 canJump = false;
                 isJumping = true;
@@ -202,6 +207,14 @@ public class PlayerController: HealthInterface
     {
         //Debug.Log("attacking");
     }
+
+    public virtual void Climb(){
+        isClimbing = true;
+        // doesn't collide with ground objects while climbing
+        // Physics.IgnoreLayerCollision((int)Layers.Player, (int)Layers.Ground, true);
+        // isGrounded = true; TODO: jump off while climbing?
+        charRb.gravityScale = 0f;
+    }
     
     // Update is called once per frame
     protected virtual void Update()
@@ -224,7 +237,9 @@ public class PlayerController: HealthInterface
 
 
     protected virtual void ComputeHorizontalVelocity() {
-        
+        if (isClimbing && canClimb){
+            return;
+        }
         if (movingRight && Vector2.Dot(charRb.velocity,slopePerpendicularVector) < 0){
             playerVelocityX = acceleration;
         }
@@ -252,6 +267,26 @@ public class PlayerController: HealthInterface
     protected virtual void ComputeVelocity(){
         ComputeHorizontalVelocity();
         Debug.Log("Grounded:" + isGrounded + " " + "OnSlope:" + isOnSlope + " " + "isJumping:" + isJumping + " " + "canJump:" + canJump + " " + "jumpNextUpdate" + jumpNextFixedUpdate);
+
+        if(isClimbing && canClimb){
+            float mousePosY = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
+            if (Input.GetButton("Move")){
+                // TODO: fix this climb movement
+                if( Camera.main.ScreenToWorldPoint(Input.mousePosition).y > charRb.position.y + mouseLeeway && charCollider.bounds.min.y < playerManagerComp.GetClimbTop()){
+                    // Debug.Log("max at " +  charCollider.bounds.max.y);
+                    charRb.velocity = new Vector2(0f, climbSpeed);
+                } else if( Camera.main.ScreenToWorldPoint(Input.mousePosition).y < charRb.position.y + mouseLeeway && charCollider.bounds.max.y > playerManagerComp.GetClimbBottom()) {
+                    // Debug.Log("max at " +  playerManagerComp.GetClosestInteraction().bounds.min.y);
+                    charRb.velocity = new Vector2(0f, -climbSpeed);
+                } else {
+                    charRb.velocity = Vector2.zero;
+                }
+
+            } else {
+                charRb.velocity = Vector2.zero;
+            }
+            return;
+        }
 
         if (isGrounded && jumpNextFixedUpdate){
             charRb.AddForce(new Vector2 (0f, jumpVelocity), ForceMode2D.Impulse);
