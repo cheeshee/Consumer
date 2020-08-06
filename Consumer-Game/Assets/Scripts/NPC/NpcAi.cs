@@ -94,12 +94,11 @@ public class NpcAi : MonoBehaviour, HealthInterface
 
     //Heatlh
     
-    [HideInInspector] public int health { get; set; }
-    public int maxHealth  { get; set; }
+    [HideInInspector] public float health { get; set; }
+    [HideInInspector] public float percentageHealth { get; set; }
+    [SerializeField] public float maxHealth  { get; set; }
     public virtual void InitializeHealth()
     {
-        
-        maxHealth = 100;
         health = maxHealth;
     }
 

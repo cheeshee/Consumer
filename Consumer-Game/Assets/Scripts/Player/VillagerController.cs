@@ -40,6 +40,10 @@ public class VillagerController : PlayerController
         //collider
         storedCollider = sourceCharacter.GetComponent<CapsuleCollider2D>();
 
+        NpcAi temp = sourceCharacter.GetComponent<NpcAi>();
+
+        storedMaxHealth = temp.maxHealth;
+
     }
 
     // When player manager switches to using this controller

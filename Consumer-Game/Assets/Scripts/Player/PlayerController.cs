@@ -79,18 +79,22 @@ public class PlayerController: HealthInterface
 
 
     //Health
-    [HideInInspector] public int health { get; set; }
-    public int maxHealth  { get; set; }
+    [HideInInspector] public float health { get; set; }
+    [HideInInspector] public float percentageHealth { get; set; }
+    [SerializeField] public float maxHealth  { get; set; }
+    public float storedMaxHealth;
+
     public virtual void InitializeHealth()
     {
         
-        maxHealth = 100;
-        health = maxHealth;
+        maxHealth = storedMaxHealth;
+        health = maxHealth * percentageHealth;
     }
 
     public virtual void ApplyDamage(int points)
     {
         health = Mathf.Clamp(health - points, 0, maxHealth);
+        percentageHealth = health / maxHealth; 
     }
 
     // When player manager switches to using this controller
