@@ -182,6 +182,7 @@ public class PlayerController: HealthInterface
     public virtual void Jump()
     {
         if (Input.GetButton("Jump")){
+            playerManagerComp.StopClimbing();
             isClimbing = false;
             Physics.IgnoreLayerCollision((int)Layers.Player, (int)Layers.Ground, false);
             if(canJump){
@@ -209,11 +210,18 @@ public class PlayerController: HealthInterface
     }
 
     public virtual void Climb(){
-        isClimbing = true;
-        // doesn't collide with ground objects while climbing
-        // Physics.IgnoreLayerCollision((int)Layers.Player, (int)Layers.Ground, true);
-        // isGrounded = true; TODO: jump off while climbing?
-        charRb.gravityScale = 0f;
+        if (Input.GetButtonDown("Interact")){
+            playerManagerComp.StopClimbing();
+            isClimbing = false;
+            charRb.gravityScale = initialGravityModifier;
+        } else {
+            isClimbing = true;
+            // doesn't collide with ground objects while climbing
+            // Physics.IgnoreLayerCollision((int)Layers.Player, (int)Layers.Ground, true);
+            // isGrounded = true; TODO: jump off while climbing?
+            charRb.gravityScale = 0f;
+
+        }
     }
     
     // Update is called once per frame

@@ -82,9 +82,6 @@ public class PlayerManager : MonoBehaviour
 
     private void DetectJump()
     {
-        if(Input.GetButtonDown("Jump")){
-            climbing = false;
-        }
         characterSlots[currCharacter].Jump();
 
     }
@@ -281,6 +278,9 @@ public class PlayerManager : MonoBehaviour
         climbTop = GetClosestInteraction().bounds.max.y;
         climbBottom = GetClosestInteraction().bounds.min.y;
     }
-
+     
+    public void StopClimbing(){
+        climbing = false;
+    }
     
 }

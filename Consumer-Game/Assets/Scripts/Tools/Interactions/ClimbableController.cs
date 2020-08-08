@@ -16,6 +16,9 @@ public class ClimbableController : InteractionController
         if(inRange && playerScript.CheckClosestInteraction(playerDetectionCollider)){//closestToPlayer){
             EnterInteraction();
         } 
+        // else if (inInteraction && Input.GetButtonDown("Interact")){
+        //     playerScript.StopClimbing();
+        // }
     }
 
     protected override void EnterInteraction(){
