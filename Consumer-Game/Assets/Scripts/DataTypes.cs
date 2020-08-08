@@ -23,3 +23,11 @@ public struct InputProperties
 
 // UPDATE EVERYTIME THE LAYERS ARE CHANGED
 public enum Layers {Default, TransparentFX, Ignore_Raycast, NULL3, Water, UI, NULL6, NULL7, Ground, Player, Interaction, NpcInteraction, NpcBody}
+
+
+
+public struct Elements
+{
+    public enum Element {Fire, Water, Wind, Earth, Neutral}
+    public static float[,] ElementTable = new float [,] { {1f, 0.5f, 2f, 1f, 1f}, {2f, 1f, 1f, 0.5f, 1f}, {0.5f, 1f, 1f, 2f, 1f}, {1f, 2f, 0.5f, 1f, 1f}, {1f, 1f, 1f, 1f, 1f} };
+}

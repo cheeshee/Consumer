@@ -77,11 +77,14 @@ public class PlayerController: HealthInterface
     protected float jumpingFloatModifier = 0.5f;
     protected float initialGravityModifier = 1f;
 
+    public Elements.Element thisElement;
+    protected Elements.Element storedElement; 
+
 
     //Health
     [HideInInspector] public float health { get; set; }
     [HideInInspector] public float percentageHealth { get; set; }
-    [SerializeField] public float maxHealth  { get; set; }
+    public float maxHealth;
     public float storedMaxHealth;
 
     public virtual void InitializeHealth()
@@ -91,9 +94,9 @@ public class PlayerController: HealthInterface
         health = maxHealth * percentageHealth;
     }
 
-    public virtual void ApplyDamage(int points)
+    public virtual void ApplyDamage(float points, Elements.Element attackingElement)
     {
-        health = Mathf.Clamp(health - points, 0, maxHealth);
+        health = Mathf.Clamp(health - (points * Elements.ElementTable[(int) attackingElement, (int) thisElement]), 0, maxHealth);
         percentageHealth = health / maxHealth; 
     }
 
@@ -359,6 +362,25 @@ public class PlayerController: HealthInterface
 
     public virtual int GetCharType(){
         return charType;
+    }
+
+
+    protected virtual void SaveController(GameObject sourceCharacter){
+        // charSprite  
+        storedSprite = sourceCharacter.GetComponent<SpriteRenderer>().sprite;
+        // charAnimator
+        storedAnimator = sourceCharacter.GetComponent<Animator>();
+        //rigidbody
+        storedRb = sourceCharacter.GetComponent<Rigidbody2D>();
+        //collider
+        storedCollider = sourceCharacter.GetComponent<CapsuleCollider2D>();
+
+        NpcAi temp = sourceCharacter.GetComponent<NpcAi>();
+
+        storedMaxHealth = temp.maxHealth;
+
+        storedElement = temp.thisElement;
+
     }
 
 }

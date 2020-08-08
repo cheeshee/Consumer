@@ -26,6 +26,8 @@ public class NpcAi : MonoBehaviour, HealthInterface
 
     protected PlayerController npcController;
 
+    public Elements.Element thisElement;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -96,16 +98,18 @@ public class NpcAi : MonoBehaviour, HealthInterface
     
     [HideInInspector] public float health { get; set; }
     [HideInInspector] public float percentageHealth { get; set; }
-    [SerializeField] public float maxHealth  { get; set; }
+    public float maxHealth;
+
     public virtual void InitializeHealth()
     {
         health = maxHealth;
     }
 
-    public virtual void ApplyDamage(int points)
+    public virtual void ApplyDamage(float points, Elements.Element attackingElement)
     {
-        health = Mathf.Clamp(health - points, 0, maxHealth);
-        Debug.Log("NPC Took " + points + " damage, I have " + health + "health");
+
+        health = Mathf.Clamp(health - (points * Elements.ElementTable[(int) attackingElement, (int) thisElement]), 0, maxHealth);
+
         if (health <= 0){
             onDeath();
         }

@@ -31,18 +31,7 @@ public class VillagerController : PlayerController
         // canSwim
         // canClimb
 
-        // charSprite  
-        storedSprite = sourceCharacter.GetComponent<SpriteRenderer>().sprite;
-        // charAnimator
-        storedAnimator = sourceCharacter.GetComponent<Animator>();
-        //rigidbody
-        storedRb = sourceCharacter.GetComponent<Rigidbody2D>();
-        //collider
-        storedCollider = sourceCharacter.GetComponent<CapsuleCollider2D>();
-
-        NpcAi temp = sourceCharacter.GetComponent<NpcAi>();
-
-        storedMaxHealth = temp.maxHealth;
+        SaveController(sourceCharacter);
 
     }
 

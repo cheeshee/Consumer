@@ -41,11 +41,11 @@ public class NormalAttackController : MonoBehaviour, IPooledObject
         GameObject hitTarget = col.gameObject;
         if (hitTarget.tag == "Enemy" && isPlayerAttack)
         {
-            hitTarget.GetComponent<HealthInterface>().ApplyDamage(damage);
+            hitTarget.GetComponent<HealthInterface>().ApplyDamage(damage, Elements.Element.Neutral);
             Debug.Log("hit Enemy");
         }
         else if(hitTarget.tag ==  "Player" && !isPlayerAttack){
-            hitTarget.GetComponent<HealthInterface>().ApplyDamage(damage);
+            hitTarget.GetComponent<HealthInterface>().ApplyDamage(damage, Elements.Element.Neutral);
             Debug.Log("hit Player");
         }
 
