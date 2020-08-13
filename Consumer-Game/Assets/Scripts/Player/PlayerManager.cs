@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    // Player instance that will save everything on scene changes
+    public static PlayerManager Instance;
+
     // Array of possible controllers for player
+    [SerializeField]
     private PlayerController[] characterSlots = new PlayerController[8];
+    [SerializeField]
     private int currCharacter = 0;
     private Rigidbody2D playerRb;
 
@@ -30,6 +35,18 @@ public class PlayerManager : MonoBehaviour
 
     protected bool inSlotSelection;
 
+
+    private void Awake() {
+        if (Instance == null) {
+            DontDestroyOnLoad(gameObject);
+            Instance = this;
+        }
+        else if (Instance != this) {
+            Instance.gameObject.transform.position = gameObject.transform.position;
+            Destroy(gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +65,9 @@ public class PlayerManager : MonoBehaviour
         characterSlots[1] = new VillagerController(gameObject);
         
         closestDist = Mathf.Infinity;
-
+        
+        // load player from playerstate
+        // LoadPlayer();
 
     }
 
@@ -283,4 +302,19 @@ public class PlayerManager : MonoBehaviour
         climbing = false;
     }
     
+    // // save to PlayerState
+    // public void SavePlayer(){
+    //     PlayerState.Instance.characterSlots = (PlayerController[])characterSlots.Clone();
+    //     PlayerState.Instance.currCharacter = currCharacter;
+    //     PlayerState.Instance.playerRb = Instantiate(playerRb);
+    // }
+
+    // // load from PlayerState
+    // private void LoadPlayer(){
+    //     if (PlayerState.Instance.playerRb != null){
+    //         currCharacter = PlayerState.Instance.currCharacter;
+    //         characterSlots = PlayerState.Instance.characterSlots;
+    //         playerRb = Instantiate(PlayerState.Instance.playerRb);
+    //     }
+    // }
 }
