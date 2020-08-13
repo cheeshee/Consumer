@@ -210,16 +210,19 @@ public class PlayerController: HealthInterface
     }
 
     public virtual void Climb(){
-        if (Input.GetButtonDown("Interact")){
-            playerManagerComp.StopClimbing();
-            isClimbing = false;
-            charRb.gravityScale = initialGravityModifier;
-        } else {
-            isClimbing = true;
-            // doesn't collide with ground objects while climbing
-            // Physics.IgnoreLayerCollision((int)Layers.Player, (int)Layers.Ground, true);
-            // isGrounded = true; TODO: jump off while climbing?
-            charRb.gravityScale = 0f;
+        if (canClimb){
+            if (Input.GetButtonDown("Interact")){
+                playerManagerComp.StopClimbing();
+                isClimbing = false;
+                charRb.gravityScale = initialGravityModifier;
+            } else {
+                isClimbing = true;
+                // doesn't collide with ground objects while climbing
+                // Physics.IgnoreLayerCollision((int)Layers.Player, (int)Layers.Ground, true);
+                // isGrounded = true; TODO: jump off while climbing?
+                charRb.gravityScale = 0f;
+
+            }
 
         }
     }
@@ -398,6 +401,10 @@ public class PlayerController: HealthInterface
 
     public virtual int GetCharType(){
         return charType;
+    }
+
+    public virtual bool CanClimb() {
+        return canClimb;
     }
 
 }

@@ -29,6 +29,7 @@ public class PlayerManager : MonoBehaviour
     protected float startConsume;
 
     // detect climb variables
+    protected bool canClimb;
     protected bool climbing;
     protected float climbTop;
     protected float climbBottom;
@@ -291,6 +292,9 @@ public class PlayerManager : MonoBehaviour
         consumable = consume;
     }
 
+    public bool CanClimb() {
+        return characterSlots[currCharacter].CanClimb();
+    }
     public void Climbing(){
         climbing = true;
         // playerRb.constraints = RigidbodyConstraints2D.FreezePositionX;
