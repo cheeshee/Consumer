@@ -124,6 +124,13 @@ public class PlayerController: HealthInterface
         CopyCollider(charCollider, storedCollider);
 
         InitializeHealth();
+
+        if (!canClimb){
+            isClimbing = false;
+            playerManagerComp.StopClimbing();
+        } else {
+            isClimbing = playerManagerComp.isClimbing();
+        }
     }
 
     private void CopyRigidBody(Rigidbody2D copyTo, Rigidbody2D copyFrom){

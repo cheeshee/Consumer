@@ -305,6 +305,10 @@ public class PlayerManager : MonoBehaviour
     public void StopClimbing(){
         climbing = false;
     }
+
+    public bool isClimbing(){
+        return climbing;
+    }
     
     // // save to PlayerState
     // public void SavePlayer(){
