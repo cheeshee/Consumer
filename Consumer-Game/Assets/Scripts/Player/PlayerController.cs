@@ -68,7 +68,7 @@ public class PlayerController: HealthInterface
     protected Vector2 colliderSize;
     protected Vector2 groundCheckPosition;
     protected PlayerManager playerManagerComp;
-    protected float groundCheckRadius = 0.5f;
+    protected float groundCheckRadius = 0.1f;
     protected LayerMask playerLayerMask;
     protected Vector2 playerScale;
     protected Vector2 currentPosition;
@@ -210,8 +210,9 @@ public class PlayerController: HealthInterface
         currentPosition = playerManagerComp.GetPosition();
         groundCheckPosition = new Vector2(currentPosition.x, currentPosition.y - (colliderSize.y / 2 * playerScale.y));
         
-        GroundCheck();
         SlopeCheck();
+        GroundCheck();
+
         ComputeVelocity();        
     }
 
@@ -269,7 +270,7 @@ public class PlayerController: HealthInterface
         }
 
         if (isGrounded && jumpNextFixedUpdate){
-            charRb.AddForce(new Vector2 (0f, jumpVelocity), ForceMode2D.Impulse);
+            charRb.velocity = new Vector2 (playerVelocityX, jumpVelocity);
             jumpNextFixedUpdate = false;
         }
         else if (isGrounded && !isOnSlope && !isJumping){ //if not on slope
@@ -349,6 +350,10 @@ public class PlayerController: HealthInterface
         if(isGrounded && !isJumping && slopeDownAngle <= maxSlopeAngle){
             canJump = true;
         }
+        else{
+            canJump = false;
+        }
+        
    }
 
     protected virtual Vector2 PerpVector(Vector2 vector){
