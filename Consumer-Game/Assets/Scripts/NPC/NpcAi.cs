@@ -55,7 +55,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
         UpdateGraphics();
         DetectConsumable();
         // test purpose
-        onDeath();
+        // onDeath();
     }
 
 
@@ -69,7 +69,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
 
     protected virtual void DetectConsumable(){
         if (isDead && playerScript.CheckClosestInteraction(npcCollider)){
-            playerScript.CanConsume(true);
+            playerScript.SetCanConsume(true);
             indicatorAnimator.SetBool("inRange", true);
         } else {
             indicatorAnimator.SetBool("inRange", false);
@@ -123,7 +123,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.layer == (int) Layers.Player){
+        if (other.gameObject.layer == (int) Layers.Player && isDead){
             indicator.SetActive(true);
         }
     }
@@ -132,7 +132,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
         if (other.gameObject.layer == (int) Layers.Player){
             indicator.SetActive(false);
             playerScript.LeaveClosestInteraction(npcCollider);
-            playerScript.CanConsume(false);
+            playerScript.SetCanConsume(false);
         }
     }
 

@@ -13,12 +13,9 @@ public class ClimbableController : InteractionController
     // Update is called once per frame
     protected override void Update()
     {
-        if(inRange && playerScript.CheckClosestInteraction(playerDetectionCollider)){//closestToPlayer){
+        if(inRange){
             EnterInteraction();
         } 
-        // else if (inInteraction && Input.GetButtonDown("Interact")){
-        //     playerScript.StopClimbing();
-        // }
     }
 
     protected override void OnTriggerEnter2D(Collider2D other){
@@ -27,13 +24,14 @@ public class ClimbableController : InteractionController
 
     protected override void OnTriggerExit2D(Collider2D other){
         base.OnTriggerExit2D(other);
-        inInteraction = false;
+        // inInteraction = false;
     }
 
     private void OnTriggerStay2D(Collider2D other){
-        if (other.gameObject.layer == (int) Layers.Player && playerScript.CanClimb() && !inInteraction){
+        if (other.gameObject.layer == (int) Layers.Player && playerScript.GetCanClimb() && !playerScript.IsClimbing()){
             playerRb = other.gameObject.GetComponent<Rigidbody2D>();
             inRange = true;
+            playerScript.MarkClosestInteraction(playerDetectionCollider);
             indicator.SetActive(true);
         } else {
             inRange = false;
@@ -44,13 +42,10 @@ public class ClimbableController : InteractionController
 
     protected override void EnterInteraction(){
         if (Input.GetButtonDown("Interact")){
-            // Setting UI components
-            inInteraction = true;       
             // do stuff to start interaction    
             playerScript.Climbing(); 
             inRange = false;
             indicator.SetActive(false);
-            // playerScript.LeaveClosestInteraction(playerDetectionCollider);
         }
     }
 }

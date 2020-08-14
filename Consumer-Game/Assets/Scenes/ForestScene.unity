@@ -2408,10 +2408,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 537237065549595665, guid: b66f6d49ce282cb4f98cb066a35d373f,
+    - target: {fileID: 4804232320424874701, guid: b66f6d49ce282cb4f98cb066a35d373f,
         type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.5
+      propertyPath: m_Name
+      value: Vine
       objectReference: {fileID: 0}
     - target: {fileID: 3577550474190038580, guid: b66f6d49ce282cb4f98cb066a35d373f,
         type: 3}
@@ -2422,6 +2422,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size.y
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3577550474190038580, guid: b66f6d49ce282cb4f98cb066a35d373f,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4804232320424874700, guid: b66f6d49ce282cb4f98cb066a35d373f,
         type: 3}
@@ -2478,10 +2483,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4804232320424874701, guid: b66f6d49ce282cb4f98cb066a35d373f,
+    - target: {fileID: 537237065549595665, guid: b66f6d49ce282cb4f98cb066a35d373f,
         type: 3}
-      propertyPath: m_Name
-      value: Vine
+      propertyPath: m_LocalPosition.y
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b66f6d49ce282cb4f98cb066a35d373f, type: 3}
