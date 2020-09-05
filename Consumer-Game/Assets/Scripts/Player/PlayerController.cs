@@ -80,17 +80,27 @@ public class PlayerController: HealthInterface
     protected bool isClimbing = false;
     protected float climbSpeed = 5f;
 
+    public Elements.Element thisElement;
+    protected Elements.Element storedElement; 
+
 
     //Health
-    [HideInInspector] public int health { get; set; }
-    public int maxHealth  { get; set; }
-    public virtual void InitializeHealth(){        
-        maxHealth = 100;
-        health = maxHealth;
+    [HideInInspector] public float health { get; set; }
+    [HideInInspector] public float percentageHealth { get; set; }
+    public float maxHealth;
+    public float storedMaxHealth;
+
+    public virtual void InitializeHealth()
+    {
+        
+        maxHealth = storedMaxHealth;
+        health = maxHealth * percentageHealth;
     }
 
-    public virtual void ApplyDamage(int points){
-        health = Mathf.Clamp(health - points, 0, maxHealth);
+    public virtual void ApplyDamage(float points, Elements.Element attackingElement)
+    {
+        health = Mathf.Clamp(health - (points * Elements.ElementTable[(int) attackingElement, (int) thisElement]), 0, maxHealth);
+        percentageHealth = health / maxHealth; 
     }
 
     // When player manager switches to using this controller
@@ -363,6 +373,23 @@ public class PlayerController: HealthInterface
     public virtual int GetCharType(){
         return charType;
     }
+
+
+    protected virtual void SaveController(GameObject sourceCharacter){
+        // charSprite  
+        storedSprite = sourceCharacter.GetComponent<SpriteRenderer>().sprite;
+        // charAnimator
+        storedAnimator = sourceCharacter.GetComponent<Animator>();
+        //rigidbody
+        storedRb = sourceCharacter.GetComponent<Rigidbody2D>();
+        //collider
+        storedCollider = sourceCharacter.GetComponent<CapsuleCollider2D>();
+
+        NpcAi temp = sourceCharacter.GetComponent<NpcAi>();
+
+        storedMaxHealth = temp.maxHealth;
+
+        storedElement = temp.thisElement;
 
     public virtual bool GetCanClimb(){
         return canClimb;

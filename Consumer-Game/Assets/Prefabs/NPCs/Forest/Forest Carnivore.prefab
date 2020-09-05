@@ -164,6 +164,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDead: 0
+  thisElement: 4
+  maxHealth: 100
   FirstTargetPosition: {x: 7.6542606, y: 0.53920305}
   secondTargetPosition: {x: 0.7418227, y: -2.2579138}
   speed: 100

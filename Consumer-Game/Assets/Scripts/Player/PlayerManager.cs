@@ -61,6 +61,8 @@ public class PlayerManager : MonoBehaviour
         // testing stuff
         characterSlots[0] = new InitialController(gameObject);
         characterSlots[0].OnSwitch(gameObject);
+        characterSlots[0].percentageHealth = 1f;
+        characterSlots[0].storedMaxHealth = 100f;
         characterSlots[1] = new VillagerController(gameObject);
         
         closestDist = Mathf.Infinity;
