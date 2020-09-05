@@ -29,7 +29,7 @@ public class InitialController : PlayerController
         // defense
 
         // canSwim
-        // canClimb
+        canClimb = true;
 
         // charSprite  
         storedSprite = sourceCharacter.GetComponent<SpriteRenderer>().sprite;
@@ -45,7 +45,7 @@ public class InitialController : PlayerController
     public override void OnSwitch(GameObject player)
     {
         base.OnSwitch(player);
-         player.GetComponent<SpriteRenderer>().color = Color.white;
+        player.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     // public override void Move()
@@ -60,11 +60,8 @@ public class InitialController : PlayerController
 
     public override void Attack()
     {
-        if(Input.GetButtonDown("Attack")){
-            AttackPooler.Instance.SpawnFromPool("InitialBasicAttack", new Vector3(0.41f, -0.191f, 0f), Quaternion.identity, playerManagerComp.GetGameObject(), true);
-            Debug.Log("attacked");
-        }
-    
+        AttackPooler.Instance.SpawnFromPool("InitialBasicAttack", new Vector3(0.41f, -0.191f, 0f), Quaternion.identity, playerManagerComp.GetGameObject(), true);
+        Debug.Log("attacked");    
     }
 
 

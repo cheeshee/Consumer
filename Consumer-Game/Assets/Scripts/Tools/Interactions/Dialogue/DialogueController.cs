@@ -4,18 +4,11 @@ using UnityEngine;
 using System.IO;
 using SimpleJSON;
 
-public class DialogueController : MonoBehaviour
+public class DialogueController : InteractionController
 {
-    protected Collider2D playerDetectionCollider;
-    protected GameObject indicator;
-    protected Animator indicatorAnimator;
-    protected bool inRange;
-    protected bool inInteraction;
-    protected Rigidbody2D playerRb;
     protected GameObject textDisplayCanvas;
 
     // protected bool closestToPlayer;
-    protected PlayerManager playerScript;
 
 
     [SerializeField]
@@ -28,17 +21,10 @@ public class DialogueController : MonoBehaviour
     //currently max 10 conversations each stage change above as needed
    
     // Start is called before the first frame update
-    protected virtual void Start()
+    protected override void Start()
     {
-        playerDetectionCollider = GetComponent<Collider2D>();
-        indicator = transform.GetChild(0).gameObject;
-        indicatorAnimator = indicator.GetComponent<Animator>();
-        indicator.SetActive(false);
+        base.Start();
         textDisplayCanvas = GameObject.FindGameObjectWithTag("DialogueCanvas");
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
-        inRange = false;
-        inInteraction = false; 
-
         // TODO
         // grab these values whereever they're saved
         stage = 0;
@@ -50,33 +36,12 @@ public class DialogueController : MonoBehaviour
     }
 
     // Update is called once per frame
-    protected virtual void Update()
+    protected override void Update()
     {
-        if(inRange && playerScript.CheckClosestInteraction(playerDetectionCollider)){//closestToPlayer){
-            indicatorAnimator.SetBool("inRange", true);
-            EnterDialogue();
-        } else {
-            indicatorAnimator.SetBool("inRange", false);
-        }
+        base.Update();
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D other){
-        if (other.gameObject.layer == (int) Layers.Player){
-            playerRb = other.gameObject.GetComponent<Rigidbody2D>();
-            inRange = true;
-            indicator.SetActive(true);
-        }
-    }
-
-    protected virtual void OnTriggerExit2D(Collider2D other) {
-        if (other.gameObject.layer == (int) Layers.Player){
-            inRange = false;
-            indicator.SetActive(false);
-            playerScript.LeaveClosestInteraction(playerDetectionCollider);
-        }
-    }
-
-    protected virtual void EnterDialogue(){
+    protected override void EnterInteraction(){
         if (Input.GetButtonDown("Interact") && !textDisplayCanvas.activeSelf){
             // Setting UI components
             inInteraction = true;            

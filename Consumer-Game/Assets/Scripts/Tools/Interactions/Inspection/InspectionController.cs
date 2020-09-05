@@ -15,27 +15,20 @@ public class InspectionController : DialogueController
     // Start is called before the first frame update
     protected override void Start()
     {   
-        // consider refactoring this more to save redundant code
-        playerDetectionCollider = GetComponent<Collider2D>();
-        indicator = transform.GetChild(0).gameObject;
-        indicatorAnimator = indicator.GetComponent<Animator>();
-        indicator.SetActive(false);
-        textDisplayCanvas = GameObject.FindGameObjectWithTag("InspectionCanvas");
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
-        inRange = false;
-        inInteraction = false;   
+        base.Start();
+        textDisplayCanvas = GameObject.FindGameObjectWithTag("InspectionCanvas"); 
 
         // TODO
         // grab these values whereever they're saved
-        stage = 0;
-        currentSectionID = 0;
+        // stage = 0;
+        // currentSectionID = 0;
 
         // load the dialogue text
-        loadDialogueJSON();
+        // loadDialogueJSON();
     }
 
 
-    protected override void EnterDialogue(){
+    protected override void EnterInteraction(){
         if (Input.GetButtonDown("Interact") && !textDisplayCanvas.activeSelf){
             // Setting UI components
             inInteraction = true;            

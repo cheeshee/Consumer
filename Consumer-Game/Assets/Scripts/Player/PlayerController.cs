@@ -21,7 +21,7 @@ public class PlayerController: HealthInterface
     // protected float deceleration;
 
     //how close to mouse posiiton to stop moving
-    protected float xRange = 0.2f;
+    protected float mouseLeeway = 0.2f;
 
     protected float jumpMultiplier;
     // protected float jumpFallMultiplier;
@@ -68,7 +68,7 @@ public class PlayerController: HealthInterface
     protected Vector2 colliderSize;
     protected Vector2 groundCheckPosition;
     protected PlayerManager playerManagerComp;
-    protected float groundCheckRadius = 0.5f;
+    protected float groundCheckRadius = 0.1f;
     protected LayerMask playerLayerMask;
     protected Vector2 playerScale;
     protected Vector2 currentPosition;
@@ -76,6 +76,9 @@ public class PlayerController: HealthInterface
     protected float jumpVelocity = 4f;
     protected float jumpingFloatModifier = 0.5f;
     protected float initialGravityModifier = 1f;
+    // climbing
+    protected bool isClimbing = false;
+    protected float climbSpeed = 5f;
 
     public Elements.Element thisElement;
     protected Elements.Element storedElement; 
@@ -101,8 +104,7 @@ public class PlayerController: HealthInterface
     }
 
     // When player manager switches to using this controller
-    public virtual void OnSwitch(GameObject player)
-    {
+    public virtual void OnSwitch(GameObject player){
 
         contactFilter.useTriggers = false; //Won't check collisions against triggers
         contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("Player"))); 
@@ -126,7 +128,7 @@ public class PlayerController: HealthInterface
         CopyRigidBody(charRb, storedRb);
         //collider
         CopyCollider(charCollider, storedCollider);
-
+        
         InitializeHealth();
     }
 
@@ -151,68 +153,66 @@ public class PlayerController: HealthInterface
     }
 
 
-    public virtual void Move()
-    {
-        
+    public virtual void Default(){
+        movingLeft = false;
+        movingRight = false;
 
-        if (Input.GetButton("Move")){
-            //Right Direction
-            if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > charRb.position.x + xRange)
-            {
-                movingRight = true;
-                movingLeft = false;
-                playerManagerComp.FlipHorizontal(true);
-                    
-            }
-            //Left Direction
-            else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x< charRb.position.x - xRange)
-            {
-                movingRight = false;
-                movingLeft = true;
-                playerManagerComp.FlipHorizontal(false);
-            }
-            else {
-                movingLeft = false;
-                movingRight = false;
-            }
+        isClimbing = false;
+        charRb.gravityScale = initialGravityModifier;
+    }
+
+    public virtual void Move(){
+        //Right Direction
+        if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > charRb.position.x + mouseLeeway){
+            movingRight = true;
+            movingLeft = false;
+            playerManagerComp.FlipHorizontal(true);
+                
         }
-        else{
+        //Left Direction
+        else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x< charRb.position.x - mouseLeeway){
+            movingRight = false;
+            movingLeft = true;
+            playerManagerComp.FlipHorizontal(false);
+        }
+        else {
             movingLeft = false;
             movingRight = false;
         }
 
     }
 
-    public virtual void Jump()
-    {
-        if (Input.GetButton("Jump")){
-            if(canJump){
-                canJump = false;
-                isJumping = true;
-                jumpNextFixedUpdate = true;
-                charRb.gravityScale = jumpingFloatModifier;
-            }
-            else if (isJumping){
-                charRb.gravityScale = jumpingFloatModifier;
-            }
-            else if (!isJumping){
-                charRb.gravityScale = initialGravityModifier;
-            }
+    public virtual void Jump(){        
+        playerManagerComp.StopClimbing();
+        isClimbing = false;
+        Physics.IgnoreLayerCollision((int)Layers.Player, (int)Layers.Ground, false);
+        if(canJump){
+            canJump = false;
+            isJumping = true;
+            jumpNextFixedUpdate = true;
+            charRb.gravityScale = jumpingFloatModifier;
         }
-        else {
+        else if (isJumping){
+            charRb.gravityScale = jumpingFloatModifier;
+        }
+        else if (!isJumping){
             charRb.gravityScale = initialGravityModifier;
-        }
-        
+        }        
     }
 
-    public virtual void Attack()
-    {
+    public virtual void Attack(){
         //Debug.Log("attacking");
+    }
+
+    public virtual void Climb(){        
+        isClimbing = true;
+        // doesn't collide with ground objects while climbing
+        // Physics.IgnoreLayerCollision((int)Layers.Player, (int)Layers.Ground, true);
+        charRb.gravityScale = 0f;
     }
     
     // Update is called once per frame
-    protected virtual void Update()
-    {
+    protected virtual void Update(){
         
     }
 
@@ -220,18 +220,17 @@ public class PlayerController: HealthInterface
         currentPosition = playerManagerComp.GetPosition();
         groundCheckPosition = new Vector2(currentPosition.x, currentPosition.y - (colliderSize.y / 2 * playerScale.y));
         
-        GroundCheck();
         SlopeCheck();
-        ComputeVelocity();
-        //Debug.Log(isGrounded);
+        GroundCheck();
 
-        //Debug.Log(charRb);
-        
+        ComputeVelocity();        
     }
 
 
     protected virtual void ComputeHorizontalVelocity() {
-        
+        if (isClimbing && canClimb){
+            return;
+        }
         if (movingRight && Vector2.Dot(charRb.velocity,slopePerpendicularVector) < 0){
             playerVelocityX = acceleration;
         }
@@ -260,20 +259,37 @@ public class PlayerController: HealthInterface
         ComputeHorizontalVelocity();
         Debug.Log("Grounded:" + isGrounded + " " + "OnSlope:" + isOnSlope + " " + "isJumping:" + isJumping + " " + "canJump:" + canJump + " " + "jumpNextUpdate" + jumpNextFixedUpdate);
 
+        if(isClimbing && canClimb){
+            float mousePosY = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
+            if (Input.GetButton("Move")){
+                // TODO: fix this climb movement
+                if( Camera.main.ScreenToWorldPoint(Input.mousePosition).y > charRb.position.y + mouseLeeway && charCollider.bounds.min.y < playerManagerComp.GetClimbTop()){
+                    // Debug.Log("max at " +  charCollider.bounds.max.y);
+                    charRb.velocity = new Vector2(0f, climbSpeed);
+                } else if( Camera.main.ScreenToWorldPoint(Input.mousePosition).y < charRb.position.y + mouseLeeway && charCollider.bounds.max.y > playerManagerComp.GetClimbBottom()) {
+                    // Debug.Log("max at " +  playerManagerComp.GetClosestInteraction().bounds.min.y);
+                    charRb.velocity = new Vector2(0f, -climbSpeed);
+                } else {
+                    charRb.velocity = Vector2.zero;
+                }
+
+            } else {
+                charRb.velocity = Vector2.zero;
+            }
+            return;
+        }
+
         if (isGrounded && jumpNextFixedUpdate){
-            charRb.AddForce(new Vector2 (0f, jumpVelocity), ForceMode2D.Impulse);
+            charRb.velocity = new Vector2 (playerVelocityX, jumpVelocity);
             jumpNextFixedUpdate = false;
         }
-        else if (isGrounded && !isOnSlope && !isJumping) //if not on slope
-        {
+        else if (isGrounded && !isOnSlope && !isJumping){ //if not on slope
             charRb.velocity = new Vector2 (playerVelocityX, charRb.velocity.y);
         }
-        else if (isGrounded && isOnSlope && !isJumping) //If on slope
-        {
+        else if (isGrounded && isOnSlope && !isJumping){ //If on slope
             charRb.velocity = new Vector2 (playerVelocityX * slopePerpendicularVector.x, playerVelocityX * slopePerpendicularVector.y);
         }
-        else if (!isGrounded) //If in air
-        {
+        else if (!isGrounded){ //If in air
             charRb.velocity = new Vector2 (playerVelocityX, charRb.velocity.y);
         }
         //TODO
@@ -292,21 +308,15 @@ public class PlayerController: HealthInterface
         RaycastHit2D slopeHitFront = Physics2D.Raycast(groundCheckPosition, Vector2.right, slopeCheckDistance, playerLayerMask);
         RaycastHit2D slopeHitBack = Physics2D.Raycast(groundCheckPosition, Vector2.left, slopeCheckDistance, playerLayerMask);
 
-        if (slopeHitFront)
-        {
+        if (slopeHitFront){
             isOnSlope = true;
-
             slopeSideAngle = Vector2.Angle(slopeHitFront.normal, Vector2.up);
-
         }
-        else if (slopeHitBack)
-        {
+        else if (slopeHitBack){
             isOnSlope = true;
-
             slopeSideAngle = Vector2.Angle(slopeHitBack.normal, Vector2.up);
         }
-        else
-        {
+        else{
             slopeSideAngle = 0.0f;
             isOnSlope = false;
         }
@@ -329,12 +339,10 @@ public class PlayerController: HealthInterface
            // Debug.Log(LayerMask.LayerToName(hit.collider.gameObject.layer));
         }
 
-        if (slopeDownAngle > maxSlopeAngle || slopeSideAngle > maxSlopeAngle)
-        {
+        if (slopeDownAngle > maxSlopeAngle || slopeSideAngle > maxSlopeAngle){
             canWalkOnSlope = false;
         }
-        else
-        {
+        else{
             canWalkOnSlope = true;
         }
 
@@ -345,15 +353,17 @@ public class PlayerController: HealthInterface
     protected virtual void GroundCheck(){
         isGrounded = Physics2D.OverlapCircle(groundCheckPosition, groundCheckRadius, playerLayerMask);
         
-        if(charRb.velocity.y <= 0.0f)
-        {
+        if(charRb.velocity.y <= 0.0f){
             isJumping = false;
         }
 
-        if(isGrounded && !isJumping && slopeDownAngle <= maxSlopeAngle)
-        {
+        if(isGrounded && !isJumping && slopeDownAngle <= maxSlopeAngle){
             canJump = true;
         }
+        else{
+            canJump = false;
+        }
+        
    }
 
     protected virtual Vector2 PerpVector(Vector2 vector){
@@ -381,6 +391,8 @@ public class PlayerController: HealthInterface
 
         storedElement = temp.thisElement;
 
+    public virtual bool GetCanClimb(){
+        return canClimb;
     }
 
 }
