@@ -18,6 +18,8 @@ public class ForestSmallOneAi : ForestHerbivoreAi
         safeDistance = 3f; // must be larger than detection on herbivore
         restTime = 0.5f;
         escapeSpeedMultiplier = 1.5f;
+        npcController = new ForestSmallController(gameObject);
         // TODO: Health and other variables
+        health = 30;
     }
 }

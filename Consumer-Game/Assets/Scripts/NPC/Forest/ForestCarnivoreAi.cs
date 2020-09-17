@@ -11,7 +11,9 @@ public class ForestCarnivoreAi : PacingNpcAi
         // THESE ARE CUSTOM
         charType = (int)PlayerProperties.CharacterType.ANIMAL;
         speed = 50f;
+        npcController = new ForestCarnivoreController(gameObject);
         // TODO: Health and other variables
+        health = 70;
     }
 
     // Update is called once per frame

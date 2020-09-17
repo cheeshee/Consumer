@@ -43,7 +43,6 @@ public class NpcAi : MonoBehaviour, HealthInterface
         onPath = true;
         isDead = false;
         // TODO: instantiate an appropriate npcController 
-        npcController = new VillagerController(gameObject);
         InitializeHealth();
     }
 
@@ -56,8 +55,8 @@ public class NpcAi : MonoBehaviour, HealthInterface
     {
         UpdateGraphics();
         DetectConsumable();
-        // test purpose
-        // onDeath();
+        // Testing
+        onDeath();
     }
 
 
@@ -132,7 +131,7 @@ public class NpcAi : MonoBehaviour, HealthInterface
     }
 
     protected virtual void OnTriggerExit2D(Collider2D other) {
-        if (other.gameObject.layer == (int) Layers.Player){
+        if (other.gameObject.layer == (int) Layers.Player && isDead){
             indicator.SetActive(false);
             playerScript.LeaveClosestInteraction(npcCollider);
             playerScript.SetCanConsume(false);

@@ -24,7 +24,9 @@ public class ForestHerbivoreAi : PacingNpcAi
         safeDistance = 5f; // must be larger than detection on herbivore
         restTime = 3f; // time should be longer than needed to walk to safe distance
         escapeSpeedMultiplier = 1.2f;
+        npcController = new ForestHerbivoreController(gameObject);
         // TODO: Health and other variables
+        health = 100;
     }
 
     // Update is called once per frame

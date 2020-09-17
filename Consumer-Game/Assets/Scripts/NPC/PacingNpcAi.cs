@@ -83,7 +83,7 @@ public class PacingNpcAi : NpcAi
             return;
         if(currentWaypoint >= path.vectorPath.Count){
             reachedEndOfPath = true;
-            Debug.Log("reached end of path");
+            // Debug.Log("reached end of path");
             npcRb.velocity = new Vector2(0,0);
             return;
         } else {

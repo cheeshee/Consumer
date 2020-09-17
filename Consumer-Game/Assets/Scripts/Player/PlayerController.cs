@@ -260,7 +260,7 @@ public class PlayerController: HealthInterface
 
     protected virtual void ComputeVelocity(){
         ComputeHorizontalVelocity();
-        Debug.Log("Grounded:" + isGrounded + " " + "OnSlope:" + isOnSlope + " " + "isJumping:" + isJumping + " " + "canJump:" + canJump + " " + "jumpNextUpdate" + jumpNextFixedUpdate);
+        // Debug.Log("Grounded:" + isGrounded + " " + "OnSlope:" + isOnSlope + " " + "isJumping:" + isJumping + " " + "canJump:" + canJump + " " + "jumpNextUpdate" + jumpNextFixedUpdate);
 
         if(isClimbing && canClimb){
             float mousePosY = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
@@ -390,9 +390,9 @@ public class PlayerController: HealthInterface
 
         NpcAi temp = sourceCharacter.GetComponent<NpcAi>();
 
-        storedMaxHealth = temp.maxHealth;
+        // storedMaxHealth = temp.maxHealth;
 
-        storedElement = temp.thisElement;
+        // storedElement = temp.thisElement;
     }
 
     public virtual bool GetCanClimb(){
