@@ -192,8 +192,11 @@ public class PlayerController: HealthInterface
             jumpNextFixedUpdate = true;
             charRb.gravityScale = jumpingFloatModifier;
         }
-        else if (isJumping){
+        else if (isJumping && Input.GetButton("Jump")){
             charRb.gravityScale = jumpingFloatModifier;
+        }
+        else if (isJumping){
+            charRb.gravityScale = initialGravityModifier;
         }
         else if (!isJumping){
             charRb.gravityScale = initialGravityModifier;
@@ -390,6 +393,7 @@ public class PlayerController: HealthInterface
         storedMaxHealth = temp.maxHealth;
 
         storedElement = temp.thisElement;
+    }
 
     public virtual bool GetCanClimb(){
         return canClimb;
