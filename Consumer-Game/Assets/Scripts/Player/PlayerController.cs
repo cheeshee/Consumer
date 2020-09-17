@@ -390,10 +390,12 @@ public class PlayerController: HealthInterface
 
         NpcAi temp = sourceCharacter.GetComponent<NpcAi>();
 
-        // storedMaxHealth = temp.maxHealth;
+        storedMaxHealth = temp.maxHealth;
 
-        // storedElement = temp.thisElement;
+        storedElement = temp.thisElement;
     }
+
+
 
     public virtual bool GetCanClimb(){
         return canClimb;

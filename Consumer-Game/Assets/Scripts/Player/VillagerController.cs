@@ -8,7 +8,7 @@ public class VillagerController : PlayerController
     public VillagerController(GameObject sourceCharacter) 
     {
         //set all the variables for this controller
-        health = 100;
+        //health = 100;
 
         charSize = (int) PlayerProperties.Size.NORMAL;
         charType = (int) PlayerProperties.CharacterType.VILLAGER;
