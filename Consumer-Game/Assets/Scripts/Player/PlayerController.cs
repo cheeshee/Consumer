@@ -8,6 +8,7 @@ public class PlayerController: HealthInterface
     protected Rigidbody2D charRb;
     protected CapsuleCollider2D charCollider;
     protected ContactFilter2D contactFilter;
+    protected Animator charAnimator;
 
     
     // variables for checking how environment interacts with player
@@ -118,12 +119,13 @@ public class PlayerController: HealthInterface
         colliderSize = charCollider.size;
         playerScale = playerManagerComp.GetLocalScale();
         playerLayerMask = playerManagerComp.GetPlayerLayerMask();
+        charAnimator = player.GetComponent<Animator>();
         //charRb.bodyType = RigidbodyType2D.Dynamic;
 
         //sprite
         player.GetComponent<SpriteRenderer>().sprite = storedSprite;
         //animator
-        player.GetComponent<Animator>().runtimeAnimatorController = storedAnimator.runtimeAnimatorController;
+        player.GetComponent<Animator>().runtimeAnimatorController = storedAnimator.runtimeAnimatorController;      
         //rigidbody
         CopyRigidBody(charRb, storedRb);
         //collider
@@ -159,15 +161,16 @@ public class PlayerController: HealthInterface
 
         isClimbing = false;
         charRb.gravityScale = initialGravityModifier;
+        charAnimator.SetBool("Walk", false);
     }
 
     public virtual void Move(){
         //Right Direction
+        charAnimator.SetBool("Walk", true);
         if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > charRb.position.x + mouseLeeway){
             movingRight = true;
             movingLeft = false;
             playerManagerComp.FlipHorizontal(true);
-                
         }
         //Left Direction
         else if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x< charRb.position.x - mouseLeeway){
@@ -390,6 +393,7 @@ public class PlayerController: HealthInterface
         storedMaxHealth = temp.maxHealth;
 
         storedElement = temp.thisElement;
+    }
 
     public virtual bool GetCanClimb(){
         return canClimb;

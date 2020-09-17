@@ -11,6 +11,7 @@ public class OnKeySceneSwitch : InteractionController
         if (Input.GetButtonDown("Interact")){
             // Setting UI components
             SceneManager.LoadScene(sceneName); 
+            Debug.Log("chaning scenes");
         }
     }
 }
