@@ -205,6 +205,7 @@ public class PlayerController: HealthInterface
 
     public virtual void Attack(){
         //Debug.Log("attacking");
+        charAnimator.SetTrigger("Attack");
     }
 
     public virtual void Climb(){        

@@ -60,6 +60,7 @@ public class InitialController : PlayerController
 
     public override void Attack()
     {
+        base.Attack();
         AttackPooler.Instance.SpawnFromPool("InitialBasicAttack", new Vector3(0.41f, -0.191f, 0f), Quaternion.identity, playerManagerComp.GetGameObject(), true);
         Debug.Log("attacked");    
     }
